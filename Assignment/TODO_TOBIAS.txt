@@ -1,0 +1,19 @@
+RENDI2S departure: flights do not climb fast enough -> flights do not cross waypoints at given altitude and speed
+KUDAD3S departure: flights cross KUDAD at FL180 with SPD 323 knots - Should be FL190 with SPD 330 knots
+SPY4K departure: flights do not climb fast enough -> flights do not cross waypoints at given altitude and speed
+LOPIK3S departure: flights do not climb fast enough initially, but reach LOPIK at correct alt and speed (FL110, 320). Next waypoint not reached at correct alt and speed (TOTNA FL190, 330 -> now FL175 320)
+
+Flights on KUDAD3S Enter sector south near PESER at FL180, SPD 323 knots
+Flights on LOPIK3S ENTER sector south at middle of diagonal sector boundary
+
+Flights on RENDI2S Enter sector east between IVLUT and LUNIX at FL130, SPD 345 knots
+
+Flights on SPY4K Enter sector app at EH056 at FL45, SPD 220 knots, will cross 18R (FL50) + 18C (FL65) next waypoint is SPY (FL140 but now FL90) then ANDIK (FL190) and KEKIX (FL210)
+
+For some reason it is hard for flights to cross waypoints at the given altitude. Most departure cross 10 or 25 Flightlevels below
+
+FINISH SIPSA DEP
+CHECK 24 dep from opening 18L
+CHECK all dep from min 53:32
+
+Send email to profs over climbrate bluesky
