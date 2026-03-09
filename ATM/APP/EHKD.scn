@@ -1,0 +1,9 @@
+00:00:01.00>NH-655 call ATM/APP/HDRE
+00:02:31.00>NH-516 call ATM/APP/HDRE
+00:11:57.00>NH-770 call ATM/APP/HDRW
+
+00:00:01.00>NH-823 atdist WADTEX 3 pcall atm/app/27 NH-823
+00:16:40.00>PH-DWM atdist WADTEX 3 pcall atm/app/27 PH-DWM
+00:16:41.00>NH-287 atdist WADTEX 3 pcall atm/app/27 NH-287
+00:27:48.00>NH-270 atdist WADTEX 3 pcall atm/app/27 NH-270
+00:54:54.00>NH-546 atdist WADTEX 3 pcall atm/app/27 NH-546
