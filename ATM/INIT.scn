@@ -1,0 +1,7 @@
+00:00:00.00> call ATM/TrafficSWjsf
+00:00:00.00> call ATM/sectors
+00:00:00.00> call ATM/waypoints_west
+00:00:00.00> call ATM/APP/RNW
+00:00:00.00> call ATM/APP/WPT
+00:00:00.00> call ATM/APP/ROUTES
+00:00:00.00> HOLD
