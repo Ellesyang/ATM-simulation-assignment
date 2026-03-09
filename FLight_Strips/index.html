@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATC Flight Strips — Dutch FIR</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg2: #0f1520;
+    --bg3: #161e2e;
+    --panel: #1a2336;
+    --border: #253047;
+    --border2: #2e3d5a;
+    --text: #c8d8f0;
+    --text2: #7a9ab8;
+    --text3: #4a6a88;
+    --accent: #00b4d8;
+    --accent2: #0077a8;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --orange: #f97316;
+    --red: #ef4444;
+    --purple: #a855f7;
+
+    /* Wake categories */
+    --wake-J: #ef4444;
+    --wake-H: #f97316;
+    --wake-M: #3b82f6;
+    --wake-L: #22c55e;
+
+    /* Sector colors */
+    --sector-approach: #00b4d8;
+    --sector-departure: #a855f7;
+    --sector-noord: #22c55e;
+    --sector-west: #f59e0b;
+    --sector-zuid: #f97316;
+    --sector-oost: #ec4899;
+    --sector-unassigned: #4a6a88;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── RADAR BACKGROUND ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,180,216,0.04) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(37,48,71,0.3) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(37,48,71,0.3) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative;
+    z-index: 10;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 56px;
+  }
+
+  .logo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .logo span { color: var(--text3); }
+
+  .header-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .sector-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sector-selector label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .sector-selector select {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+
+  .sector-selector select:focus { outline: none; border-color: var(--accent); }
+
+  .conn-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .conn-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 6px var(--red);
+    transition: all 0.3s;
+  }
+  .conn-dot.connected { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .conn-dot.connecting { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); animation: blink 1s infinite; }
+
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    background: var(--bg3);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { background: var(--accent2); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: var(--accent); }
+  .btn.danger { border-color: var(--red); color: var(--red); }
+  .btn.danger:hover { background: var(--red); color: #fff; }
+
+  .time-display {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  /* ─── SERVER CONFIG BAR ─── */
+  .server-bar {
+    position: relative;
+    z-index: 10;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .server-bar label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .server-bar input {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    width: 180px;
+  }
+
+  .server-bar input:focus { outline: none; border-color: var(--accent); }
+
+  .flight-count {
+    margin-left: auto;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 1px;
+  }
+
+  .flight-count span { color: var(--accent); font-weight: bold; }
+
+  /* ─── MAIN LAYOUT ─── */
+  .main {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    height: calc(100vh - 56px - 38px);
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-title {
+    padding: 12px 16px 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sector-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+
+  .sector-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    border: 1px solid transparent;
+  }
+
+  .sector-nav-item:hover { background: var(--bg3); }
+  .sector-nav-item.active { background: rgba(0,180,216,0.1); border-color: var(--accent); }
+
+  .sector-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sector-nav-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+    letter-spacing: 0.5px;
+  }
+
+  .sector-nav-count {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    background: var(--bg3);
+    padding: 1px 6px;
+    border-radius: 10px;
+    min-width: 24px;
+    text-align: center;
+  }
+
+  /* Wake legend */
+  .wake-legend {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .wake-legend-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .wake-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .wake-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .wake-badge-small {
+    width: 20px; height: 16px;
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    font-weight: bold;
+    color: #000;
+  }
+
+  /* ─── STRIPS AREA ─── */
+  .strips-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .strips-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .strips-sector-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .strips-header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filter-bar input {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    width: 140px;
+  }
+  .filter-bar input:focus { outline: none; border-color: var(--accent); }
+  .filter-bar input::placeholder { color: var(--text3); }
+
+  .wake-filter {
+    display: flex;
+    gap: 4px;
+  }
+
+  .wake-filter-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    font-weight: bold;
+    width: 28px; height: 24px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: #000;
+    opacity: 0.5;
+  }
+
+  .wake-filter-btn.active { opacity: 1; transform: scale(1.1); }
+
+  /* ─── FLIGHT STRIP (nieuw ontwerp) ─── */
+  .strip {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: 8px 28px 1fr;
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+    cursor: default;
+    position: relative;
+    user-select: none;
+  }
+
+  .strip:hover { border-color: var(--border2); }
+  .strip.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .strip.handoff-pending { border-color: var(--yellow); animation: pulse-yellow 1s infinite; }
+  .strip.handoff-received { border-color: var(--green); box-shadow: 0 0 8px rgba(34,197,94,0.2); }
+  .strip.dragging { opacity: 0.4; border-color: var(--accent); }
+  .strip.drag-over-top { border-top: 2px solid var(--accent); }
+  .strip.drag-over-bottom { border-bottom: 2px solid var(--accent); }
+
+  @keyframes pulse-yellow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
+    50% { box-shadow: 0 0 0 4px rgba(245,158,11,0); }
+  }
+
+  /* Wake color bar */
+  .strip-wake-bar { }
+
+  /* Drag handle */
+  .strip-drag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    color: var(--text3);
+    font-size: 12px;
+    transition: color 0.15s;
+    background: rgba(0,0,0,0.1);
+  }
+  .strip-drag:hover { color: var(--text2); }
+  .strip-drag:active { cursor: grabbing; }
+
+  /* Main body — 3 rows */
+  .strip-body {
+    padding: 7px 14px 7px 10px;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 3px;
+  }
+
+  /* ROW 1: callsign | actype | wake | route | [delete] */
+  .strip-r1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .strip-callsign {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 19px;
+    color: #fff;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .strip-actype {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .wake-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 7px;
+    border-radius: 3px;
+    color: #000;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  .strip-route {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text3);
+    letter-spacing: 0.5px;
+    flex: 1;
+  }
+  .strip-route .apt { color: var(--text2); font-size: 13px; }
+  .strip-route .arr { color: var(--text3); margin: 0 5px; }
+
+  .strip-sector-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  .strip-del-btn {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 2px;
+    border-radius: 3px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .strip-del-btn:hover { color: var(--red); }
+
+  /* ROW 2: phase pills | remark field */
+  .strip-r2 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .phase-pill {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    border-radius: 3px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.12s;
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+  .phase-pill:hover { opacity: 0.7; }
+  .phase-pill.active { opacity: 1; }
+
+  .phase-pill.p-approach  { color: var(--accent);  border-color: var(--accent2); background: rgba(0,180,216,0.12); }
+  .phase-pill.p-landing   { color: var(--green);   border-color: #166534;        background: rgba(34,197,94,0.12); }
+  .phase-pill.p-holding   { color: var(--yellow);  border-color: #854d0e;        background: rgba(245,158,11,0.12); }
+  .phase-pill.p-departure { color: var(--purple);  border-color: #6b21a8;        background: rgba(168,85,247,0.12); }
+  .phase-pill.p-cruise    { color: var(--text2);   border-color: var(--border2); background: transparent; }
+  .phase-pill.p-climbout  { color: var(--orange);  border-color: #9a3412;        background: rgba(249,115,22,0.12); }
+
+  .strip-remark-input {
+    flex: 1;
+    min-width: 80px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid transparent;
+    color: var(--yellow);
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    font-style: italic;
+    padding: 1px 4px;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+  .strip-remark-input::placeholder { color: var(--text3); font-style: italic; }
+  .strip-remark-input:focus { border-bottom-color: var(--yellow); background: rgba(245,158,11,0.05); }
+
+  /* ROW 3: handoff buttons */
+  .strip-r3 {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .strip-r3-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-right: 2px;
+    flex-shrink: 0;
+  }
+
+  .handoff-pill {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.12s;
+    flex-shrink: 0;
+  }
+  .handoff-pill:hover { border-color: var(--yellow); color: var(--yellow); background: rgba(245,158,11,0.1); }
+  .handoff-pill.selected { border-color: var(--yellow); color: var(--yellow); background: rgba(245,158,11,0.15); }
+
+  .handoff-confirm {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 2px 10px;
+    border-radius: 3px;
+    border: 1px solid var(--green);
+    background: rgba(34,197,94,0.15);
+    color: var(--green);
+    cursor: pointer;
+    transition: all 0.12s;
+    flex-shrink: 0;
+    display: none;
+  }
+  .handoff-confirm:hover { background: rgba(34,197,94,0.3); }
+  .handoff-cancel {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: none;
+    background: none;
+    color: var(--text3);
+    cursor: pointer;
+    display: none;
+  }
+  .handoff-cancel:hover { color: var(--red); }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text3);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+  .empty-state h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.hidden { display: none; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    width: 520px;
+    max-width: 95vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .modal-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    transition: all 0.15s;
+  }
+  .modal-close:hover { color: var(--text); background: var(--bg3); }
+
+  .modal-body { padding: 20px; }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-group label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    padding: 7px 10px;
+    border-radius: 4px;
+    transition: border-color 0.15s;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { outline: none; border-color: var(--accent); }
+
+  .form-group textarea { resize: vertical; min-height: 60px; font-family: 'Barlow', sans-serif; font-size: 13px; }
+
+  .modal-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  /* Handoff modal */
+  .handoff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .handoff-sector-btn {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .handoff-sector-btn:hover { border-color: var(--accent); background: rgba(0,180,216,0.1); }
+  .handoff-sector-btn .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .handoff-sector-btn span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  /* Import area */
+  .import-area {
+    border: 2px dashed var(--border2);
+    border-radius: 6px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 16px;
+  }
+  .import-area:hover { border-color: var(--accent); background: rgba(0,180,216,0.05); }
+  .import-area input { display: none; }
+  .import-area .import-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
+  .import-area p { font-size: 13px; color: var(--text2); }
+  .import-area small { font-size: 11px; color: var(--text3); }
+
+  .csv-preview {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+    display: none;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  /* Toast */
+  .toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .toast {
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: slideIn 0.2s ease;
+    max-width: 300px;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .toast.success { border-left: 3px solid var(--green); }
+  .toast.info { border-left: 3px solid var(--accent); }
+  .toast.warning { border-left: 3px solid var(--yellow); }
+  .toast.error { border-left: 3px solid var(--red); }
+
+  /* View all toggle */
+  .view-toggle {
+    display: flex;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .view-toggle button {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border: none;
+    background: transparent;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+  }
+
+  .view-toggle button.active { background: var(--accent2); color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">NL<span>/</span>FIR <span>·</span> ATC STRIPS</div>
+
+  <div class="header-center">
+    <div class="sector-selector">
+      <label>Mijn sector</label>
+      <select id="mySectorSelect" onchange="setMySector(this.value)">
+        <option value="Schiphol Approach">Schiphol Approach</option>
+        <option value="Schiphol Departure">Schiphol Departure</option>
+        <option value="Noord">Noord</option>
+        <option value="West">West</option>
+        <option value="Zuid">Zuid</option>
+        <option value="Oost">Oost</option>
+      </select>
+    </div>
+
+    <div class="conn-status">
+      <div class="conn-dot connecting" id="connDot"></div>
+      <span id="connText" style="color:var(--text3)">VERBINDEN...</span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <div class="view-toggle">
+      <button id="viewMine" class="active" onclick="setView('mine')">MIJN SECTOR</button>
+      <button id="viewAll" onclick="setView('all')">ALLE</button>
+    </div>
+    <button class="btn" onclick="openAddModal()">+ VLUCHT</button>
+    <button class="btn primary" onclick="openImportModal()">⬆ IMPORTEER CSV</button>
+    <button class="btn" onclick="openBinModal()" id="binBtn" style="position:relative">
+      📥 BIN <span id="binCount" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;"></span>
+    </button>
+    <div style="display:flex;align-items:center;gap:6px;border-left:1px solid var(--border);padding-left:12px;">
+      <div id="simTimer" style="font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--yellow);letter-spacing:2px;min-width:72px;">T+00:00</div>
+      <button class="btn" id="simStartBtn" onclick="startSim()" style="padding:4px 10px;font-size:11px;">▶ START</button>
+      <button class="btn" id="simPauseBtn" onclick="pauseSim()" style="padding:4px 10px;font-size:11px;display:none;">⏸ PAUSE</button>
+      <button class="btn danger" onclick="resetSim()" style="padding:4px 8px;font-size:11px;">↺</button>
+    </div>
+    <div class="time-display" id="clock">--:--:--</div>
+  </div>
+</header>
+
+<div class="server-bar">
+  <label>SERVER IP</label>
+  <input type="text" id="serverInput" placeholder="192.168.1.x:3001" value="localhost:3001">
+  <button class="btn" onclick="connectWS()" style="padding:3px 10px;font-size:11px;">VERBIND</button>
+  <div style="color:var(--text3);font-size:11px;font-family:'Share Tech Mono',monospace;">
+    ⓘ Start server.js op één laptop, voer het IP in op alle andere laptops
+  </div>
+  <div class="flight-count">
+    STRIPS IN ZICHT: <span id="myCount">0</span> &nbsp;|&nbsp; TOTAAL FIR: <span id="totalCount">0</span>
+  </div>
+</div>
+
+<div class="main">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-title">Sectoren</div>
+    <div class="sector-nav" id="sectorNav"></div>
+
+    <div class="wake-legend">
+      <div class="wake-legend-title">Wake Turbulence</div>
+      <div class="wake-items">
+        <div class="wake-item">
+          <div class="wake-badge-small" style="background:var(--wake-J)">J</div>
+          <span style="font-size:11px;color:var(--text2)">Super Heavy</span>
+        </div>
+        <div class="wake-item">
+          <div class="wake-badge-small" style="background:var(--wake-H)">H</div>
+          <span style="font-size:11px;color:var(--text2)">Heavy</span>
+        </div>
+        <div class="wake-item">
+          <div class="wake-badge-small" style="background:var(--wake-M)">M</div>
+          <span style="font-size:11px;color:var(--text2)">Medium</span>
+        </div>
+        <div class="wake-item">
+          <div class="wake-badge-small" style="background:var(--wake-L)">L</div>
+          <span style="font-size:11px;color:var(--text2)">Light</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Strips area -->
+  <div class="strips-area" id="stripsArea">
+    <div class="strips-header">
+      <div class="strips-sector-name" id="sectorTitle" style="color:var(--accent)">Schiphol Approach</div>
+      <div style="color:var(--text3);font-size:12px;font-family:'Share Tech Mono',monospace;" id="sectorSubtitle">APP / TWR</div>
+      <div class="strips-header-right">
+        <div class="filter-bar">
+          <input type="text" placeholder="Zoek callsign..." id="searchInput" oninput="renderStrips()">
+          <div class="wake-filter" id="wakeFilter">
+            <button class="wake-filter-btn active" style="background:var(--wake-J)" onclick="toggleWakeFilter('J',this)">J</button>
+            <button class="wake-filter-btn active" style="background:var(--wake-H)" onclick="toggleWakeFilter('H',this)">H</button>
+            <button class="wake-filter-btn active" style="background:var(--wake-M)" onclick="toggleWakeFilter('M',this)">M</button>
+            <button class="wake-filter-btn active" style="background:var(--wake-L)" onclick="toggleWakeFilter('L',this)">L</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="stripsList"></div>
+  </div>
+</div>
+
+<!-- ─── MODALS ─── -->
+
+<!-- Edit/Add Flight Modal -->
+<div class="modal-overlay hidden" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="addModalTitle">Nieuwe Vlucht</div>
+      <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Callsign</label>
+          <input type="text" id="f_callsign" placeholder="KLM1234" style="text-transform:uppercase">
+        </div>
+        <div class="form-group">
+          <label>Vliegtuigtype</label>
+          <input type="text" id="f_actype" placeholder="B738" style="text-transform:uppercase">
+        </div>
+        <div class="form-group">
+          <label>Wake Categorie</label>
+          <select id="f_wake">
+            <option value="J">J — Super Heavy (A380, AN-124)</option>
+            <option value="H">H — Heavy (B744, B77W, A333)</option>
+            <option value="M" selected>M — Medium (B738, A320)</option>
+            <option value="L">L — Light (C172, PC12)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Vluchtfase</label>
+          <select id="f_phase">
+            <option value="approach">Approach</option>
+            <option value="landing">Landing</option>
+            <option value="holding">Holding</option>
+            <option value="departure">Departure</option>
+            <option value="cruise">Cruise</option>
+            <option value="climbout">Climb Out</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Van (ICAO)</label>
+          <input type="text" id="f_from" placeholder="EHAM" style="text-transform:uppercase" maxlength="4">
+        </div>
+        <div class="form-group">
+          <label>Naar (ICAO)</label>
+          <input type="text" id="f_to" placeholder="EGLL" style="text-transform:uppercase" maxlength="4">
+        </div>
+        <div class="form-group">
+          <label>Sector</label>
+          <select id="f_sector">
+            <option>Schiphol Approach</option>
+            <option>Schiphol Departure</option>
+            <option>Noord</option>
+            <option>West</option>
+            <option>Zuid</option>
+            <option>Oost</option>
+            <option>Unassigned</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="f_status">
+            <option value="active">Actief</option>
+            <option value="handoff-pending">Handoff Pending</option>
+            <option value="handoff-received">Handoff Received</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Opmerking</label>
+          <textarea id="f_remark" placeholder="Bijv. RNAV, VFR, prioriteit, bijzonderheden..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('addModal')">Annuleer</button>
+      <button class="btn primary" onclick="saveFlight()">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Handoff Modal -->
+<div class="modal-overlay hidden" id="handoffModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Handoff — <span id="handoffCallsign" style="color:#fff"></span></div>
+      <button class="modal-close" onclick="closeModal('handoffModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--text2);font-size:13px;margin-bottom:16px;">Draag over aan:</p>
+      <div class="handoff-grid" id="handoffGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Import Modal -->
+<div class="modal-overlay hidden" id="importModal">
+  <div class="modal" style="width:580px">
+    <div class="modal-header">
+      <div class="modal-title">Importeer BlueSky CSV</div>
+      <button class="modal-close" onclick="closeModal('importModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="import-area" onclick="document.getElementById('csvFileInput').click()">
+        <input type="file" id="csvFileInput" accept=".csv,.txt,.scn" onchange="handleCSVFile(event)">
+        <div class="import-icon">📂</div>
+        <p>Klik om een CSV of scenario bestand te kiezen</p>
+        <small>Verwacht kolommen: callsign, actype, wake, from, to, sector (of automatisch detecteren)</small>
+      </div>
+      <div class="csv-preview" id="csvPreview"></div>
+      <div style="color:var(--text3);font-size:12px;margin-bottom:12px;font-family:'Share Tech Mono',monospace;">
+        <strong style="color:var(--text2)">CSV formaat — actieve vluchten:</strong><br>
+        callsign;actype;wake;from;to;sector;phase;remark<br>
+        KLM1234;B738;M;EHAM;EGLL;Schiphol Departure;departure;<br><br>
+        <strong style="color:var(--yellow)">CSV formaat — inkomende vluchten (buiten FIR):</strong><br>
+        callsign;actype;wake;from;to;sector;phase;remark;entryTime;entrySector<br>
+        <span style="color:var(--text2)">Zet sector op <strong>Inbound</strong>, entryTime = minuten na simulatiestart (bijv. 12.5), entrySector = welke sector ze binnenkomen</span><br>
+        DLH5432;A333;H;EDDM;EHAM;Inbound;cruise;;12;Noord<br>
+        BAW443;B788;H;EGLL;EHAM;Inbound;cruise;;8.5;West
+      </div>
+      <div id="importResult" style="display:none;padding:10px;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:12px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('importModal')">Sluiten</button>
+      <button class="btn primary" id="importConfirmBtn" onclick="confirmImport()" style="display:none">Importeer naar alle controllers</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Inbound Bin Modal -->
+<div class="modal-overlay hidden" id="binModal">
+  <div class="modal" style="width:680px;max-height:80vh">
+    <div class="modal-header">
+      <div class="modal-title">📥 Inbound Bin — Vluchten die FIR binnenkomen</div>
+      <button class="modal-close" onclick="closeModal('binModal')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:12px 16px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);">
+        <span>Huidige simtijd: <span id="binSimTime" style="color:var(--yellow)">T+00:00</span></span>
+        <span style="margin-left:auto">Strips verschijnen automatisch in de sector op het opgegeven moment. Of claim ze hier handmatig.</span>
+      </div>
+      <div id="binList" style="display:flex;flex-direction:column;gap:6px;max-height:55vh;overflow-y:auto;"></div>
+      <div id="binEmpty" style="text-align:center;padding:40px;color:var(--text3);font-size:13px;display:none;">
+        Geen inkomende vluchten in de bin.<br>
+        <small>Voeg vluchten toe met sector "Inbound" en een entryTime in het CSV.</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+
+const SECTORS = ['Schiphol Approach','Schiphol Departure','Noord','West','Zuid','Oost','Unassigned'];
+
+const SECTOR_COLORS = {
+  'Schiphol Approach': 'var(--sector-approach)',
+  'Schiphol Departure': 'var(--sector-departure)',
+  'Noord': 'var(--sector-noord)',
+  'West': 'var(--sector-west)',
+  'Zuid': 'var(--sector-zuid)',
+  'Oost': 'var(--sector-oost)',
+  'Unassigned': 'var(--sector-unassigned)'
+};
+
+const WAKE_COLORS = { J:'var(--wake-J)', H:'var(--wake-H)', M:'var(--wake-M)', L:'var(--wake-L)' };
+
+let state = {
+  flights: {},
+  sectors: Object.fromEntries(SECTORS.map(s => [s, []]))
+};
+
+let mySector = 'Schiphol Approach';
+let viewMode = 'mine';
+let activeFilters = new Set(['J','H','M','L']);
+let selectedCallsign = null;
+let ws = null;
+let editingCallsign = null;
+let pendingImport = null;
+
+// ─── SIMULATIE TIMER ─────────────────────────────────────────────────────────
+let simStartTime = null;
+let simRunning = false;
+let simElapsedSeconds = 0;
+let simInterval = null;
+
+function startSim() {
+  if (simRunning) return;
+  simStartTime = Date.now() - simElapsedSeconds * 1000;
+  simRunning = true;
+  simInterval = setInterval(simTick, 1000);
+  document.getElementById('simStartBtn').style.display = 'none';
+  document.getElementById('simPauseBtn').style.display = 'inline-block';
+  send({ type: 'SIM_START', payload: { startedAt: simStartTime } });
+  showToast('Simulatie gestart', 'success');
+}
+
+function pauseSim() {
+  simRunning = false;
+  clearInterval(simInterval);
+  document.getElementById('simStartBtn').style.display = 'inline-block';
+  document.getElementById('simPauseBtn').style.display = 'none';
+}
+
+function resetSim() {
+  pauseSim();
+  simElapsedSeconds = 0;
+  simStartTime = null;
+  document.getElementById('simTimer').textContent = 'T+00:00';
+  send({ type: 'SIM_RESET', payload: {} });
+  showToast('Simulatie gereset', 'info');
+}
+
+function simTick() {
+  simElapsedSeconds = Math.floor((Date.now() - simStartTime) / 1000);
+  document.getElementById('simTimer').textContent = 'T+' + formatSimTime(simElapsedSeconds);
+  checkIncomingFlights();
+  renderBin();
+}
+
+function formatSimTime(totalSec) {
+  const m = Math.floor(totalSec / 60), s = totalSec % 60;
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function simMinutes() { return simElapsedSeconds / 60; }
+
+function checkIncomingFlights() {
+  const t = simMinutes();
+  let anyNew = false;
+  Object.values(state.flights).forEach(f => {
+    if (f.sector === 'Inbound' && f.entryTime != null && t >= parseFloat(f.entryTime) && !f._activated) {
+      const targetSector = f.entrySector || 'Unassigned';
+      const payload = { callsign: f.callsign, fromSector: 'Inbound', toSector: targetSector };
+      send({ type: 'HANDOFF', payload });
+      applyLocalMessage({ type: 'HANDOFF', payload });
+      showToast(`✈ ${f.callsign} → ${targetSector}  (T+${formatSimTime(Math.round(parseFloat(f.entryTime)*60))})`, 'warning');
+      anyNew = true;
+    }
+  });
+  if (anyNew) renderAll();
+}
+
+// ─── WEBSOCKET ───────────────────────────────────────────────────────────────
+let wsDisconnectTime = null;
+let wsAlertShown = false;
+
+function connectWS() {
+  const addr = document.getElementById('serverInput').value.trim();
+  const url = `ws://${addr}`;
+  setConnStatus('connecting');
+
+  if (ws) { try { ws.close(); } catch(e) {} }
+
+  ws = new WebSocket(url);
+
+  ws.onopen = () => {
+    setConnStatus('connected');
+    wsDisconnectTime = null;
+    wsAlertShown = false;
+  };
+
+  ws.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'FULL_STATE') {
+      state = msg.payload;
+      if (msg.payload.simStartedAt && !simRunning) {
+        simStartTime = msg.payload.simStartedAt;
+        simElapsedSeconds = Math.floor((Date.now() - simStartTime) / 1000);
+        if (simElapsedSeconds > 0) {
+          simRunning = true;
+          clearInterval(simInterval);
+          simInterval = setInterval(simTick, 1000);
+          document.getElementById('simStartBtn').style.display = 'none';
+          document.getElementById('simPauseBtn').style.display = 'inline-block';
+        }
+      }
+      renderAll();
+    } else if (msg.type === 'FLIGHT_UPDATE') {
+      state.flights[msg.payload.callsign] = msg.payload.flight;
+      renderAll();
+    } else if (msg.type === 'SIM_START') {
+      simStartTime = msg.payload.startedAt;
+      simRunning = true;
+      clearInterval(simInterval);
+      simInterval = setInterval(simTick, 1000);
+      document.getElementById('simStartBtn').style.display = 'none';
+      document.getElementById('simPauseBtn').style.display = 'inline-block';
+      showToast('Simulatie gestart door andere controller', 'info');
+    } else if (msg.type === 'SIM_RESET') {
+      pauseSim();
+      simElapsedSeconds = 0;
+      document.getElementById('simTimer').textContent = 'T+00:00';
+    }
+  };
+
+  ws.onclose = () => {
+    setConnStatus('disconnected');
+    if (!wsDisconnectTime) wsDisconnectTime = Date.now();
+    setTimeout(() => {
+      if (wsDisconnectTime && !wsAlertShown) {
+        wsAlertShown = true;
+        showToast('Verbinding verbroken — herverbinden...', 'warning');
+      }
+    }, 10000);
+    setTimeout(connectWS, 3000);
+  };
+
+  ws.onerror = () => {};
+}
+
+function send(msg) {
+  if (ws && ws.readyState === 1) {
+    ws.send(JSON.stringify(msg));
+  } else {
+    // Offline fallback — update local state
+    applyLocalMessage(msg);
+    renderAll();
+  }
+}
+
+function applyLocalMessage(msg) {
+  if (msg.type === 'ADD_FLIGHT') {
+    const f = msg.payload.flight;
+    state.flights[f.callsign] = f;
+    if (!state.sectors[f.sector]) state.sectors[f.sector] = [];
+    state.sectors[f.sector].push(f.callsign);
+  } else if (msg.type === 'UPDATE_FLIGHT') {
+    if (state.flights[msg.payload.callsign]) {
+      state.flights[msg.payload.callsign] = { ...state.flights[msg.payload.callsign], ...msg.payload.updates };
+    }
+  } else if (msg.type === 'HANDOFF') {
+    const { callsign, fromSector, toSector } = msg.payload;
+    if (state.flights[callsign]) {
+      state.flights[callsign].sector = toSector;
+      state.flights[callsign].status = 'handoff-received';
+      state.sectors[fromSector] = (state.sectors[fromSector] || []).filter(c => c !== callsign);
+      if (!state.sectors[toSector]) state.sectors[toSector] = [];
+      state.sectors[toSector].push(callsign);
+    }
+  } else if (msg.type === 'DELETE_FLIGHT') {
+    const cs = msg.payload.callsign;
+    if (state.flights[cs]) {
+      const sector = state.flights[cs].sector;
+      state.sectors[sector] = (state.sectors[sector] || []).filter(c => c !== cs);
+      delete state.flights[cs];
+    }
+  } else if (msg.type === 'IMPORT_FLIGHTS') {
+    state.flights = msg.payload.flights;
+    state.sectors = msg.payload.sectors;
+  }
+}
+
+function setConnStatus(s) {
+  const dot = document.getElementById('connDot');
+  const txt = document.getElementById('connText');
+  dot.className = 'conn-dot ' + s;
+  txt.textContent = s === 'connected' ? 'LIVE' : s === 'connecting' ? 'VERBINDEN...' : 'OFFLINE';
+  txt.style.color = s === 'connected' ? 'var(--green)' : s === 'connecting' ? 'var(--yellow)' : 'var(--red)';
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+
+function renderAll() {
+  renderSidebar();
+  renderStrips();
+  updateCounts();
+}
+
+function renderSidebar() {
+  const nav = document.getElementById('sectorNav');
+  nav.innerHTML = '';
+  SECTORS.filter(s => s !== 'Unassigned').forEach(sector => {
+    const count = (state.sectors[sector] || []).length;
+    const isActive = (viewMode === 'mine' && sector === mySector) || (viewMode === 'all');
+    const div = document.createElement('div');
+    div.className = 'sector-nav-item' + (sector === mySector && viewMode === 'mine' ? ' active' : '');
+    div.onclick = () => { viewMode = 'mine'; mySector = sector; document.getElementById('mySectorSelect').value = sector; setMySector(sector); };
+    div.innerHTML = `
+      <div class="sector-dot" style="background:${SECTOR_COLORS[sector]}"></div>
+      <div class="sector-nav-name">${sector}</div>
+      <div class="sector-nav-count">${count}</div>
+    `;
+    nav.appendChild(div);
+  });
+}
+
+function renderStrips() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const container = document.getElementById('stripsList');
+
+  let toShow = [];
+  if (viewMode === 'mine') {
+    toShow = (state.sectors[mySector] || []).map(cs => state.flights[cs]).filter(Boolean);
+  } else {
+    toShow = Object.values(state.flights);
+  }
+
+  toShow = toShow.filter(f =>
+    activeFilters.has(f.wake || 'M') &&
+    (!search || f.callsign.toLowerCase().includes(search) || (f.actype||'').toLowerCase().includes(search))
+  );
+
+  // Respect manual order from sectorOrder, then sort remaining
+  const orderKey = viewMode === 'mine' ? mySector : '__all__';
+  const order = sectorOrder[orderKey] || [];
+  toShow.sort((a, b) => {
+    const ia = order.indexOf(a.callsign);
+    const ib = order.indexOf(b.callsign);
+    if (ia !== -1 && ib !== -1) return ia - ib;
+    if (ia !== -1) return -1;
+    if (ib !== -1) return 1;
+    // Default: handoff-pending first
+    if (a.status === 'handoff-pending' && b.status !== 'handoff-pending') return -1;
+    if (b.status === 'handoff-pending' && a.status !== 'handoff-pending') return 1;
+    return a.callsign.localeCompare(b.callsign);
+  });
+
+  if (toShow.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">✈</div>
+        <h3>Geen vluchten in ${viewMode === 'mine' ? mySector : 'FIR'}</h3>
+        <p>Importeer een CSV bestand of voeg handmatig een vlucht toe</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  toShow.forEach(f => container.appendChild(makeStrip(f)));
+  initDragDrop(container);
+}
+
+// Manual ordering per sector
+let sectorOrder = {};
+
+function saveOrder(container) {
+  const orderKey = viewMode === 'mine' ? mySector : '__all__';
+  sectorOrder[orderKey] = [...container.querySelectorAll('.strip')].map(el => el.dataset.callsign);
+}
+
+function initDragDrop(container) {
+  let dragEl = null;
+
+  container.querySelectorAll('.strip-drag').forEach(handle => {
+    handle.addEventListener('mousedown', () => {
+      handle.closest('.strip').setAttribute('draggable', 'true');
+    });
+  });
+
+  container.querySelectorAll('.strip').forEach(strip => {
+    strip.addEventListener('dragstart', e => {
+      dragEl = strip;
+      strip.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+
+    strip.addEventListener('dragend', () => {
+      strip.classList.remove('dragging');
+      container.querySelectorAll('.strip').forEach(s => {
+        s.classList.remove('drag-over-top', 'drag-over-bottom');
+        s.removeAttribute('draggable');
+      });
+      saveOrder(container);
+      dragEl = null;
+    });
+
+    strip.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (!dragEl || dragEl === strip) return;
+      const rect = strip.getBoundingClientRect();
+      const mid = rect.top + rect.height / 2;
+      strip.classList.remove('drag-over-top', 'drag-over-bottom');
+      if (e.clientY < mid) {
+        strip.classList.add('drag-over-top');
+      } else {
+        strip.classList.add('drag-over-bottom');
+      }
+    });
+
+    strip.addEventListener('dragleave', () => {
+      strip.classList.remove('drag-over-top', 'drag-over-bottom');
+    });
+
+    strip.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragEl || dragEl === strip) return;
+      const rect = strip.getBoundingClientRect();
+      const mid = rect.top + rect.height / 2;
+      if (e.clientY < mid) {
+        container.insertBefore(dragEl, strip);
+      } else {
+        container.insertBefore(dragEl, strip.nextSibling);
+      }
+      strip.classList.remove('drag-over-top', 'drag-over-bottom');
+      saveOrder(container);
+    });
+  });
+}
+
+const PHASES = ['approach','landing','holding','departure','cruise','climbout'];
+
+function makeStrip(f) {
+  const wakeColor = WAKE_COLORS[f.wake] || WAKE_COLORS['M'];
+  const div = document.createElement('div');
+  div.className = `strip${f.status === 'handoff-pending' ? ' handoff-pending' : f.status === 'handoff-received' ? ' handoff-received' : ''}`;
+  div.dataset.callsign = f.callsign;
+
+  const sectorColor = SECTOR_COLORS[f.sector] || 'var(--text3)';
+  const otherSectors = SECTORS.filter(s => s !== f.sector && s !== 'Unassigned' && s !== 'Inbound');
+
+  // Phase pills HTML
+  const phasePills = PHASES.map(p => {
+    const labels = { approach:'APPROACH', landing:'LANDING', holding:'HOLDING', departure:'DEPARTURE', cruise:'CRUISE', climbout:'CLIMBING' };
+    const isActive = (f.phase || 'cruise') === p;
+    return `<button class="phase-pill p-${p}${isActive ? ' active' : ''}" onclick="setPhase('${f.callsign}','${p}',this)">${labels[p]}</button>`;
+  }).join('');
+
+  // Handoff pills
+  const handoffPills = otherSectors.map(s => {
+    const shortNames = {
+      'Schiphol Approach':'APP','Schiphol Departure':'DEP',
+      'Noord':'NRD','West':'WST','Zuid':'ZLD','Oost':'OST','Centraal':'CTR'
+    };
+    return `<button class="handoff-pill" onclick="selectHandoff(this,'${f.callsign}','${f.sector}','${s}')">${shortNames[s]||s}</button>`;
+  }).join('');
+
+  div.innerHTML = `
+    <div class="strip-wake-bar" style="background:${wakeColor}"></div>
+    <div class="strip-drag" title="Sleep om te herordenen">⠿</div>
+    <div class="strip-body">
+      <div class="strip-r1">
+        <span class="strip-callsign">${f.callsign}</span>
+        <span class="strip-actype">${f.actype || '----'}</span>
+        <span class="wake-badge" style="background:${wakeColor}">${f.wake || 'M'}</span>
+        <span class="strip-route"><span class="apt">${f.from||'????'}</span><span class="arr">→</span><span class="apt">${f.to||'????'}</span></span>
+        ${viewMode === 'all' ? `<span class="strip-sector-tag" style="color:${sectorColor};border-color:${sectorColor}">${f.sector||''}</span>` : ''}
+        <button class="strip-del-btn" onclick="deleteFlight('${f.callsign}')" title="Verwijder">✕</button>
+      </div>
+      <div class="strip-r2">
+        ${phasePills}
+        <input class="strip-remark-input" value="${(f.remark||'').replace(/"/g,'&quot;')}" placeholder="⚑ Comment..." 
+          onchange="setRemark('${f.callsign}',this.value)"
+          onblur="setRemark('${f.callsign}',this.value)">
+      </div>
+      <div class="strip-r3">
+        <span class="strip-r3-label">HANDOFF TO→</span>
+        ${handoffPills}
+        <button class="handoff-confirm" onclick="confirmHandoff(this)">✓ CONFIRM</button>
+        <button class="handoff-cancel" onclick="cancelHandoff(this)">✕</button>
+      </div>
+    </div>`;
+
+  return div;
+}
+
+function setPhase(callsign, phase, btn) {
+  // Toggle active on all pills in this strip
+  const strip = btn.closest('.strip');
+  strip.querySelectorAll('.phase-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  send({ type: 'UPDATE_FLIGHT', payload: { callsign, updates: { phase } } });
+  applyLocalMessage({ type: 'UPDATE_FLIGHT', payload: { callsign, updates: { phase } } });
+}
+
+function setRemark(callsign, remark) {
+  send({ type: 'UPDATE_FLIGHT', payload: { callsign, updates: { remark } } });
+  applyLocalMessage({ type: 'UPDATE_FLIGHT', payload: { callsign, updates: { remark } } });
+}
+
+function updateCounts() {
+  const myCount = (state.sectors[mySector] || []).length;
+  const total = Object.keys(state.flights).length;
+  document.getElementById('myCount').textContent = myCount;
+  document.getElementById('totalCount').textContent = total;
+}
+
+// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
+
+function setMySector(sector) {
+  mySector = sector;
+  viewMode = 'mine';
+  document.getElementById('viewMine').classList.add('active');
+  document.getElementById('viewAll').classList.remove('active');
+  const color = SECTOR_COLORS[sector] || 'var(--accent)';
+  document.getElementById('sectorTitle').textContent = sector;
+  document.getElementById('sectorTitle').style.color = color;
+  renderAll();
+}
+
+function setView(v) {
+  viewMode = v;
+  document.getElementById('viewMine').classList.toggle('active', v === 'mine');
+  document.getElementById('viewAll').classList.toggle('active', v === 'all');
+  if (v === 'all') {
+    document.getElementById('sectorTitle').textContent = 'Alle sectoren — Dutch FIR';
+    document.getElementById('sectorTitle').style.color = 'var(--text)';
+  } else {
+    setMySector(mySector);
+  }
+  renderAll();
+}
+
+function toggleWakeFilter(cat, btn) {
+  if (activeFilters.has(cat)) { activeFilters.delete(cat); btn.classList.remove('active'); }
+  else { activeFilters.add(cat); btn.classList.add('active'); }
+  renderStrips();
+}
+
+function deleteFlight(cs) {
+  if (!confirm(`Vlucht ${cs} verwijderen?`)) return;
+  send({ type: 'DELETE_FLIGHT', payload: { callsign: cs } });
+  applyLocalMessage({ type: 'DELETE_FLIGHT', payload: { callsign: cs } });
+  renderAll();
+  showToast(`${cs} verwijderd`, 'info');
+}
+
+// ─── ADD / EDIT MODAL ─────────────────────────────────────────────────────────
+
+function openAddModal() {
+  editingCallsign = null;
+  document.getElementById('addModalTitle').textContent = 'Nieuwe Vlucht';
+  document.getElementById('f_callsign').value = '';
+  document.getElementById('f_callsign').disabled = false;
+  document.getElementById('f_actype').value = '';
+  document.getElementById('f_wake').value = 'M';
+  document.getElementById('f_phase').value = 'approach';
+  document.getElementById('f_from').value = '';
+  document.getElementById('f_to').value = 'EHAM';
+  document.getElementById('f_sector').value = mySector;
+  document.getElementById('f_status').value = 'active';
+  document.getElementById('f_remark').value = '';
+  openModal('addModal');
+}
+
+function openEditModal(cs) {
+  const f = state.flights[cs];
+  if (!f) return;
+  editingCallsign = cs;
+  document.getElementById('addModalTitle').textContent = `Bewerk — ${cs}`;
+  document.getElementById('f_callsign').value = f.callsign;
+  document.getElementById('f_callsign').disabled = true;
+  document.getElementById('f_actype').value = f.actype || '';
+  document.getElementById('f_wake').value = f.wake || 'M';
+  document.getElementById('f_phase').value = f.phase || 'cruise';
+  document.getElementById('f_from').value = f.from || '';
+  document.getElementById('f_to').value = f.to || '';
+  document.getElementById('f_sector').value = f.sector || mySector;
+  document.getElementById('f_status').value = f.status || 'active';
+  document.getElementById('f_remark').value = f.remark || '';
+  openModal('addModal');
+}
+
+function saveFlight() {
+  const callsign = (editingCallsign || document.getElementById('f_callsign').value.toUpperCase().trim());
+  if (!callsign) { showToast('Callsign is verplicht', 'error'); return; }
+
+  const flight = {
+    callsign,
+    actype: document.getElementById('f_actype').value.toUpperCase().trim(),
+    wake: document.getElementById('f_wake').value,
+    phase: document.getElementById('f_phase').value,
+    from: document.getElementById('f_from').value.toUpperCase().trim(),
+    to: document.getElementById('f_to').value.toUpperCase().trim(),
+    sector: document.getElementById('f_sector').value,
+    status: document.getElementById('f_status').value,
+    remark: document.getElementById('f_remark').value.trim(),
+    addedAt: Date.now()
+  };
+
+  if (editingCallsign) {
+    send({ type: 'UPDATE_FLIGHT', payload: { callsign, updates: flight } });
+    applyLocalMessage({ type: 'UPDATE_FLIGHT', payload: { callsign, updates: flight } });
+    showToast(`${callsign} bijgewerkt`, 'success');
+  } else {
+    if (state.flights[callsign]) { showToast(`${callsign} bestaat al`, 'warning'); return; }
+    send({ type: 'ADD_FLIGHT', payload: { flight } });
+    applyLocalMessage({ type: 'ADD_FLIGHT', payload: { flight } });
+    showToast(`${callsign} toegevoegd aan ${flight.sector}`, 'success');
+  }
+
+  closeModal('addModal');
+  renderAll();
+}
+
+// ─── HANDOFF ──────────────────────────────────────────────────────────────────
+
+function openHandoff(cs) {
+  const f = state.flights[cs];
+  if (!f) return;
+  document.getElementById('handoffCallsign').textContent = cs;
+
+  const grid = document.getElementById('handoffGrid');
+  grid.innerHTML = '';
+  SECTORS.filter(s => s !== f.sector && s !== 'Unassigned').forEach(sector => {
+    const btn = document.createElement('button');
+    btn.className = 'handoff-sector-btn';
+    btn.innerHTML = `<div class="dot" style="background:${SECTOR_COLORS[sector]}"></div><span>${sector}</span>`;
+    btn.onclick = () => doHandoff(cs, f.sector, sector);
+    grid.appendChild(btn);
+  });
+
+  openModal('handoffModal');
+}
+
+function selectHandoff(btn, callsign, fromSector, toSector) {
+  const r3 = btn.closest('.strip-r3');
+  // Deselect all pills in this strip
+  r3.querySelectorAll('.handoff-pill').forEach(p => p.classList.remove('selected'));
+  btn.classList.add('selected');
+  // Store pending handoff on confirm button
+  const confirm = r3.querySelector('.handoff-confirm');
+  const cancel  = r3.querySelector('.handoff-cancel');
+  confirm.dataset.callsign   = callsign;
+  confirm.dataset.fromSector = fromSector;
+  confirm.dataset.toSector   = toSector;
+  confirm.style.display = 'inline-block';
+  cancel.style.display  = 'inline-block';
+}
+
+function confirmHandoff(btn) {
+  const { callsign, fromSector, toSector } = btn.dataset;
+  doHandoff(callsign, fromSector, toSector);
+}
+
+function cancelHandoff(btn) {
+  const r3 = btn.closest('.strip-r3');
+  r3.querySelectorAll('.handoff-pill').forEach(p => p.classList.remove('selected'));
+  r3.querySelector('.handoff-confirm').style.display = 'none';
+  btn.style.display = 'none';
+}
+
+function doHandoff(callsign, fromSector, toSector) {
+  send({ type: 'HANDOFF', payload: { callsign, fromSector, toSector } });
+  applyLocalMessage({ type: 'HANDOFF', payload: { callsign, fromSector, toSector } });
+  renderAll();
+  showToast(`${callsign} → ${toSector}`, 'warning');
+}
+
+// ─── CSV IMPORT ───────────────────────────────────────────────────────────────
+
+function openImportModal() {
+  pendingImport = null;
+  document.getElementById('csvPreview').style.display = 'none';
+  document.getElementById('importResult').style.display = 'none';
+  document.getElementById('importConfirmBtn').style.display = 'none';
+  document.getElementById('csvFileInput').value = '';
+  openModal('importModal');
+}
+
+function handleCSVFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const text = ev.target.result;
+    parseCSV(text, file.name);
+  };
+  reader.readAsText(file);
+}
+
+function parseCSV(text, filename) {
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'));
+  const preview = document.getElementById('csvPreview');
+  const result = document.getElementById('importResult');
+  const confirmBtn = document.getElementById('importConfirmBtn');
+
+  // Detect delimiter
+  const delim = lines[0].includes(';') ? ';' : ',';
+
+  // Check for header
+  const firstLine = lines[0].toLowerCase();
+  const hasHeader = firstLine.includes('callsign') || firstLine.includes('cs') || firstLine.includes('acid');
+  const dataLines = hasHeader ? lines.slice(1) : lines;
+
+  // Auto-detect BlueSky .scn format: "HH:MM:SS>CRE CALLSIGN,actype,lat,lon,hdg,fl,spd"
+  const isScn = filename.endsWith('.scn') || text.includes('>CRE ');
+
+  const newFlights = {};
+  const newSectors = Object.fromEntries(SECTORS.map(s => [s, []]));
+  let parsed = 0, errors = 0;
+
+  // Wake category based on actype
+  function guessWake(actype) {
+    const t = (actype || '').toUpperCase();
+    if (['A388','A380','AN124','B748'].includes(t)) return 'J';
+    if (['B744','B743','B742','B74F','B77W','B77L','B772','B773','B763','B762','B764','A332','A333','A343','A345','A346','A35K','A359','B787','B788','B789','B78X','MD11'].some(x => t.startsWith(x) || t === x)) return 'H';
+    if (['B738','B737','B736','B739','B752','B753','A319','A320','A321','A318','E170','E175','E190','E195','CRJ','DH8','AT7','AT4'].some(x => t.startsWith(x))) return 'M';
+    return 'M';
+  }
+
+  if (isScn) {
+    // Parse BlueSky scenario format
+    lines.forEach(line => {
+      const m = line.match(/>CRE\s+(\w+),(\w+),/i);
+      if (m) {
+        const cs = m[1].toUpperCase();
+        const ac = m[2].toUpperCase();
+        const wake = guessWake(ac);
+        newFlights[cs] = { callsign: cs, actype: ac, wake, phase: 'cruise', from: '????', to: '????', sector: 'Unassigned', status: 'active', remark: '' };
+        newSectors['Unassigned'].push(cs);
+        parsed++;
+      }
+    });
+  } else {
+    // Parse CSV
+    // Columns: callsign;actype;wake;from;to;sector;phase;remark
+    dataLines.forEach((line, i) => {
+      if (!line) return;
+      const cols = line.split(delim).map(c => c.trim().replace(/^"|"$/g, ''));
+      if (cols.length < 1) { errors++; return; }
+
+      const cs = (cols[0] || '').toUpperCase();
+      if (!cs) { errors++; return; }
+
+      const actype = (cols[1] || '').toUpperCase();
+      const wake = cols[2] && ['J','H','M','L'].includes(cols[2].toUpperCase()) ? cols[2].toUpperCase() : guessWake(actype);
+      const from = (cols[3] || '').toUpperCase() || '????';
+      const to = (cols[4] || '').toUpperCase() || '????';
+      const sectorRaw = cols[5] || '';
+      const sector = SECTORS.find(s => s.toLowerCase() === sectorRaw.toLowerCase()) || (sectorRaw.toLowerCase() === 'inbound' ? 'Inbound' : 'Unassigned');
+      const phase = cols[6] || 'cruise';
+      const remark = cols[7] || '';
+      const entryTime = cols[8] ? parseFloat(cols[8]) : null;   // minuten na sim start
+      const entrySector = cols[9] ? (SECTORS.find(s => s.toLowerCase() === cols[9].toLowerCase().trim()) || cols[9].trim()) : null;
+
+      newFlights[cs] = { callsign: cs, actype, wake, from, to, sector, phase, remark, entryTime, entrySector, status: 'active', addedAt: Date.now() };
+      const sectorKey = sector === 'Inbound' ? 'Inbound' : sector;
+      if (!newSectors[sectorKey]) newSectors[sectorKey] = [];
+      newSectors[sectorKey].push(cs);
+      parsed++;
+    });
+  }
+
+  preview.style.display = 'block';
+  preview.textContent = `Eerste 5 regels:\n${lines.slice(0, 5).join('\n')}`;
+
+  result.style.display = 'block';
+  result.style.background = parsed > 0 ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)';
+  result.style.border = `1px solid ${parsed > 0 ? 'var(--green)' : 'var(--red)'}`;
+  result.style.color = parsed > 0 ? 'var(--green)' : 'var(--red)';
+  result.textContent = parsed > 0
+    ? `✓ ${parsed} vluchten klaar om te importeren${errors > 0 ? ` (${errors} regels overgeslagen)` : ''}`
+    : `✗ Geen vluchten gevonden. Controleer het formaat.`;
+
+  if (parsed > 0) {
+    pendingImport = { flights: newFlights, sectors: newSectors };
+    confirmBtn.style.display = 'inline-block';
+  }
+}
+
+function confirmImport() {
+  if (!pendingImport) return;
+  send({ type: 'IMPORT_FLIGHTS', payload: pendingImport });
+  applyLocalMessage({ type: 'IMPORT_FLIGHTS', payload: pendingImport });
+  renderAll();
+  closeModal('importModal');
+  showToast(`${Object.keys(pendingImport.flights).length} vluchten geïmporteerd naar alle controllers`, 'success');
+  pendingImport = null;
+}
+
+// ─── MODALS ───────────────────────────────────────────────────────────────────
+
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.add('hidden'); });
+});
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+
+function showToast(msg, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  const icons = { success: '✓', info: 'ℹ', warning: '⚠', error: '✕' };
+  toast.innerHTML = `<span>${icons[type]}</span>${msg}`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3000);
+}
+
+// ─── CLOCK ────────────────────────────────────────────────────────────────────
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    String(now.getUTCHours()).padStart(2,'0') + ':' +
+    String(now.getUTCMinutes()).padStart(2,'0') + ':' +
+    String(now.getUTCSeconds()).padStart(2,'0') + 'Z';
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── KEYBOARD SHORTCUTS ──────────────────────────────────────────────────────
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
+  if (e.key === 'n' && !e.target.closest('input,textarea,select')) openAddModal();
+  if (e.key === 'f' && !e.target.closest('input,textarea,select')) document.getElementById('searchInput').focus();
+});
+
+// ─── INBOUND BIN ─────────────────────────────────────────────────────────────
+
+function openBinModal() {
+  renderBin();
+  openModal('binModal');
+}
+
+function renderBin() {
+  const inbound = Object.values(state.flights).filter(f => f.sector === 'Inbound');
+  const binList = document.getElementById('binList');
+  const binEmpty = document.getElementById('binEmpty');
+  const binCount = document.getElementById('binCount');
+  const binSimTimeEl = document.getElementById('binSimTime');
+
+  if (binSimTimeEl) binSimTimeEl.textContent = 'T+' + formatSimTime(simElapsedSeconds);
+
+  // Update bin badge op de knop
+  const pendingBin = inbound.length;
+  if (binCount) {
+    binCount.textContent = pendingBin;
+    binCount.style.display = pendingBin > 0 ? 'flex' : 'none';
+  }
+
+  if (!binList) return;
+
+  if (inbound.length === 0) {
+    binList.innerHTML = '';
+    if (binEmpty) binEmpty.style.display = 'block';
+    return;
+  }
+  if (binEmpty) binEmpty.style.display = 'none';
+
+  // Sorteer op entryTime
+  inbound.sort((a, b) => (a.entryTime || 999) - (b.entryTime || 999));
+
+  const t = simMinutes();
+  binList.innerHTML = '';
+  inbound.forEach(f => {
+    const wakeColor = WAKE_COLORS[f.wake] || WAKE_COLORS['M'];
+    const eta = f.entryTime != null ? parseFloat(f.entryTime) : null;
+    const remaining = eta != null ? eta - t : null;
+    const isOverdue = remaining != null && remaining < 0;
+    const isSoon = remaining != null && remaining >= 0 && remaining <= 3;
+
+    const div = document.createElement('div');
+    div.style.cssText = `display:grid;grid-template-columns:6px 1fr auto;background:var(--panel);border:1px solid ${isOverdue ? 'var(--red)' : isSoon ? 'var(--yellow)' : 'var(--border)'};border-radius:5px;overflow:hidden;`;
+
+    const etaLabel = eta != null
+      ? `T+${formatSimTime(Math.round(eta * 60))}`
+      : '??:??';
+    const remainLabel = remaining != null
+      ? (isOverdue ? `<span style="color:var(--red)">OVERDUE</span>` : `<span style="color:${isSoon ? 'var(--yellow)' : 'var(--text2)'}">nog ${remaining.toFixed(1)} min</span>`)
+      : '';
+
+    div.innerHTML = `
+      <div style="background:${wakeColor}"></div>
+      <div style="padding:8px 12px;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:3px;">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:16px;color:#fff;">${f.callsign}</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);">${f.actype||'----'}</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:bold;padding:1px 5px;border-radius:2px;background:${wakeColor};color:#000">${f.wake||'M'}</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent);">${f.from||'????'} → ${f.to||'????'}</span>
+        </div>
+        <div style="display:flex;gap:12px;font-size:11px;font-family:'Share Tech Mono',monospace;">
+          <span style="color:var(--text3);">Inkomsttijd: <strong style="color:var(--text)">${etaLabel}</strong></span>
+          ${remainLabel ? `<span>${remainLabel}</span>` : ''}
+          ${f.entrySector ? `<span style="color:var(--text3);">→ <strong style="color:${SECTOR_COLORS[f.entrySector]||'var(--text)'}">${f.entrySector}</strong></span>` : ''}
+          ${f.remark ? `<span style="color:var(--yellow);font-style:italic;">⚑ ${f.remark}</span>` : ''}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;">
+        <button class="strip-btn" onclick="claimFromBin('${f.callsign}')" style="font-size:11px;padding:4px 10px;border-color:var(--green);color:var(--green);">✓ CLAIM</button>
+        <button class="strip-btn delete-btn" onclick="deleteFlight('${f.callsign}')">✕</button>
+      </div>`;
+    binList.appendChild(div);
+  });
+}
+
+function claimFromBin(cs) {
+  const f = state.flights[cs];
+  if (!f) return;
+  const target = f.entrySector || mySector;
+  const payload = { callsign: cs, fromSector: 'Inbound', toSector: target };
+  send({ type: 'HANDOFF', payload });
+  applyLocalMessage({ type: 'HANDOFF', payload });
+  renderAll();
+  renderBin();
+  showToast(`${cs} geclaimd → ${target}`, 'success');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+setMySector('Schiphol Approach');
+connectWS();
+
+// Sample data for offline demo
+setTimeout(() => {
+  if (Object.keys(state.flights).length === 0 && (!ws || ws.readyState !== 1)) {
+    const demo = [
+      { callsign: 'KLM1234', actype: 'B738', wake: 'M', from: 'EGLL', to: 'EHAM', sector: 'Schiphol Approach', phase: 'approach', status: 'active', remark: '' },
+      { callsign: 'EZY4521', actype: 'A320', wake: 'M', from: 'LFPG', to: 'EHAM', sector: 'Schiphol Approach', phase: 'holding', status: 'active', remark: 'Holding SPL' },
+      { callsign: 'BAW443',  actype: 'B788', wake: 'H', from: 'EGLL', to: 'EHAM', sector: 'Schiphol Approach', phase: 'approach', status: 'handoff-received', remark: '' },
+      { callsign: 'DLH5432', actype: 'A333', wake: 'H', from: 'EDDM', to: 'EHAM', sector: 'Noord', phase: 'cruise', status: 'active', remark: '' },
+      { callsign: 'AFR1890', actype: 'A388', wake: 'J', from: 'LFPG', to: 'EHAM', sector: 'West', phase: 'cruise', status: 'handoff-pending', remark: 'SUPER - extra sep!' },
+      { callsign: 'RYR789',  actype: 'B738', wake: 'M', from: 'EHAM', to: 'LEMD', sector: 'Schiphol Departure', phase: 'departure', status: 'active', remark: '' },
+    ];
+    const flights = {};
+    const sectors = Object.fromEntries(SECTORS.map(s => [s, []]));
+    demo.forEach(f => { f.addedAt = Date.now(); flights[f.callsign] = f; sectors[f.sector].push(f.callsign); });
+    state = { flights, sectors };
+    renderAll();
+    showToast('Demo data geladen (geen server)', 'info');
+  }
+}, 2500);
+</script>
+</body>
+</html>
