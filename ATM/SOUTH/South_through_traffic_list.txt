@@ -1,0 +1,62 @@
+S1 (to West):
+00:00:00.00>%0 ADDWPT LUMEN
+00:00:00.00>%0 ADDWPT BRESK
+00:00:00.00>%0 ADDWPT MASOS
+
+S2 (to West):
+00:00:00.00>%0 ADDWPT HELEN
+00:00:00.00>%0 ADDWPT ALINA
+00:00:00.00>%0 ADDWPT MASOS
+
+S3 (to West):
+00:00:00.00>%0 ADDWPT KONTI
+00:00:00.00>%0 ADDWPT TOLEN
+00:00:00.00>%0 ADDWPT MASOS
+
+S4 (Maastricht area, might link with SE entry)
+00:00:00.00>%0 ADDWPT ERIGO
+00:00:00.00>%0 ADDWPT ROMIN
+00:00:00.00>%0 ADDWPT BASGU
+
+S5 (Maastricht area, might link with SE entry)
+00:00:00.00>%0 ADDWPT GUL
+00:00:00.00>%0 ADDWPT ROMIN
+00:00:00.00>%0 ADDWPT BASGU
+
+00:00:00.00 KLM746 S3 (maybe make separate, spawns right across the border?)
+
+Around 15 mins
+NH-823 S1 (Den Helder)
+TRA784 S2 (RTM)
+KLM513 S3 (RTM)
+TRA347 S3 (RTM)
+TRA164 S4 (AMS)
+KLM263 S5 (AMS)
+KLM960 S2 (AMS)
+KLM941 S2 (AMS)
+TRA985 S4 (AMS)
+KLM288 S2 (AMS)
+KLM486 S1 (AMS)
+
+Around 20/25 mins
+KLM699 S3 (AMS appears at about 20mins near/in FIR border, assign immediately)
+KLM796 S5 (AMS)
+KLM577 S1 (AMS)
+TRA504 S2 (RTM)
+KLM239 S3 (AMS)
+KLM251 S2 (RTM)
+
+43 mins
+KLM250 S1 (AMS)
+KLM659 S2 (AMS)
+KLM213 S1 (AMS)
+TRA842 S3 (RTM, arrived MASOS same time as KLM213, consider S2 which is a bit shorter?)
+
+1hr
+PH-EFJ S1 (AMS)
+TRA491 S2 (AMS)
+TRA786 S3 (RTM)
+KLM175 S1 (AMS)
+TRA633 S3 (RTM)
+KLM113 S5 (AMS)
+KLM636 S3 (AMS)
