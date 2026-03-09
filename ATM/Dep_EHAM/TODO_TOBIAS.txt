@@ -1,0 +1,12 @@
+TRA509 creation line and initial heading 00.54.42.95
+TRA843 creation line and initial heading 00:55:37.05
+KLM449 creation line and initial heading 00:56:12.95
+KLM978 creation line and initial heading 00:57:07.05
+KLM873 creation line and initial heading 00:57:42.95
+KLM758 Delayed by 30 seconds from 00:58:37.05 to 00:59:07.05
+
+
+For final sim uncall deletion areas
+
+NOTE to myself:
+give arrivals rotterdam routes after entering my sector: east or sw
