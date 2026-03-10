@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,10 +33,10 @@
     /* Sector colors */
     --sector-approach: #00b4d8;
     --sector-departure: #a855f7;
-    --sector-noord: #22c55e;
+    --sector-north: #22c55e;
     --sector-west: #f59e0b;
-    --sector-zuid: #f97316;
-    --sector-oost: #ec4899;
+    --sector-south: #f97316;
+    --sector-east: #ec4899;
     --sector-unassigned: #4a6a88;
   }
 
@@ -551,18 +551,31 @@
     border: 1px solid;
     cursor: pointer;
     transition: all 0.12s;
-    opacity: 0.4;
+    opacity: 0.28;
     flex-shrink: 0;
   }
-  .phase-pill:hover { opacity: 0.7; }
-  .phase-pill.active { opacity: 1; }
+  .phase-pill:hover { opacity: 0.6; }
+  .phase-pill.active {
+    opacity: 1;
+    transform: scale(1.08);
+    box-shadow: 0 0 8px 1px currentColor;
+    font-size: 12px;
+    z-index: 1;
+  }
 
-  .phase-pill.p-approach  { color: var(--accent);  border-color: var(--accent2); background: rgba(0,180,216,0.12); }
-  .phase-pill.p-landing   { color: var(--green);   border-color: #166534;        background: rgba(34,197,94,0.12); }
-  .phase-pill.p-holding   { color: var(--yellow);  border-color: #854d0e;        background: rgba(245,158,11,0.12); }
-  .phase-pill.p-departure { color: var(--purple);  border-color: #6b21a8;        background: rgba(168,85,247,0.12); }
+  .phase-pill.p-approach  { color: var(--accent);  border-color: var(--accent);  background: rgba(0,180,216,0.12); }
+  .phase-pill.p-landing   { color: var(--green);   border-color: var(--green);   background: rgba(34,197,94,0.12); }
+  .phase-pill.p-holding   { color: var(--yellow);  border-color: var(--yellow);  background: rgba(245,158,11,0.12); }
+  .phase-pill.p-departure { color: var(--purple);  border-color: var(--purple);  background: rgba(168,85,247,0.12); }
   .phase-pill.p-cruise    { color: var(--text2);   border-color: var(--border2); background: transparent; }
-  .phase-pill.p-climbout  { color: var(--orange);  border-color: #9a3412;        background: rgba(249,115,22,0.12); }
+  .phase-pill.p-climbout  { color: var(--orange);  border-color: var(--orange);  background: rgba(249,115,22,0.12); }
+
+  .phase-pill.active.p-approach  { background: rgba(0,180,216,0.25); }
+  .phase-pill.active.p-landing   { background: rgba(34,197,94,0.25); }
+  .phase-pill.active.p-holding   { background: rgba(245,158,11,0.25); }
+  .phase-pill.active.p-departure { background: rgba(168,85,247,0.25); }
+  .phase-pill.active.p-cruise    { background: rgba(120,150,180,0.2); }
+  .phase-pill.active.p-climbout  { background: rgba(249,115,22,0.25); }
 
   .strip-remark-input {
     flex: 1;
@@ -643,6 +656,25 @@
     display: none;
   }
   .handoff-cancel:hover { color: var(--red); }
+
+  .exit-pill {
+    border-color: #7f1d1d !important;
+    color: #fca5a5 !important;
+    background: rgba(239,68,68,0.08) !important;
+    margin-left: 4px;
+  }
+  .exit-pill:hover { border-color: var(--red) !important; color: var(--red) !important; background: rgba(239,68,68,0.18) !important; }
+  .exit-pill.selected { border-color: var(--red) !important; color: var(--red) !important; background: rgba(239,68,68,0.2) !important; }
+
+  .landed-pill {
+    border-color: #14532d !important;
+    color: #86efac !important;
+    background: rgba(34,197,94,0.08) !important;
+    margin-left: 2px;
+  }
+  .landed-pill:hover { border-color: var(--green) !important; color: var(--green) !important; background: rgba(34,197,94,0.2) !important; }
+  .landed-pill.selected { border-color: var(--green) !important; color: var(--green) !important; background: rgba(34,197,94,0.25) !important; }
+
 
   /* Empty state */
   .empty-state {
@@ -901,38 +933,43 @@
 
   <div class="header-center">
     <div class="sector-selector">
-      <label>Mijn sector</label>
+      <label>My sector</label>
       <select id="mySectorSelect" onchange="setMySector(this.value)">
         <option value="Schiphol Approach">Schiphol Approach</option>
         <option value="Schiphol Departure">Schiphol Departure</option>
-        <option value="Noord">Noord</option>
+        <option value="North">Noord</option>
         <option value="West">West</option>
-        <option value="Zuid">Zuid</option>
-        <option value="Oost">Oost</option>
+        <option value="South">Zuid</option>
+        <option value="East">Oost</option>
       </select>
     </div>
 
     <div class="conn-status">
       <div class="conn-dot connecting" id="connDot"></div>
-      <span id="connText" style="color:var(--text3)">VERBINDEN...</span>
+      <span id="connText" style="color:var(--text3)">CONNECTING...</span>
     </div>
   </div>
 
   <div class="header-right">
     <div class="view-toggle">
-      <button id="viewMine" class="active" onclick="setView('mine')">MIJN SECTOR</button>
-      <button id="viewAll" onclick="setView('all')">ALLE</button>
+      <button id="viewMine" class="active" onclick="setView('mine')">MY SECTOR</button>
+      <button id="viewAll" onclick="setView('all')">ALL</button>
     </div>
     <button class="btn" onclick="openAddModal()">+ VLUCHT</button>
-    <button class="btn primary" onclick="openImportModal()">⬆ IMPORTEER CSV</button>
-    <button class="btn" onclick="openBinModal()" id="binBtn" style="position:relative">
-      📥 BIN <span id="binCount" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;"></span>
-    </button>
+    <button class="btn primary" onclick="openImportModal()">⬆ IMPORT CSV</button>
+
     <div style="display:flex;align-items:center;gap:6px;border-left:1px solid var(--border);padding-left:12px;">
-      <div id="simTimer" style="font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--yellow);letter-spacing:2px;min-width:72px;">T+00:00</div>
+      <div id="simTimer" style="font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--yellow);letter-spacing:2px;min-width:72px;">T+00:00:00</div>
       <button class="btn" id="simStartBtn" onclick="startSim()" style="padding:4px 10px;font-size:11px;">▶ START</button>
       <button class="btn" id="simPauseBtn" onclick="pauseSim()" style="padding:4px 10px;font-size:11px;display:none;">⏸ PAUSE</button>
       <button class="btn danger" onclick="resetSim()" style="padding:4px 8px;font-size:11px;">↺</button>
+      <div style="display:flex;align-items:center;gap:4px;border-left:1px solid var(--border);padding-left:8px;" title="Show departure strips this many seconds before spawn">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);">DEP EARLY</span>
+        <input id="earlyWarnInput" type="number" value="10" min="0" max="300" step="5"
+          style="width:44px;background:var(--bg3);border:1px solid var(--border2);color:var(--yellow);font-family:'Share Tech Mono',monospace;font-size:12px;padding:2px 4px;border-radius:3px;text-align:center;"
+          onchange="renderStrips()">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text3);">SEC</span>
+      </div>
     </div>
     <div class="time-display" id="clock">--:--:--</div>
   </div>
@@ -941,19 +978,19 @@
 <div class="server-bar">
   <label>SERVER IP</label>
   <input type="text" id="serverInput" placeholder="192.168.1.x:3001" value="localhost:3001">
-  <button class="btn" onclick="connectWS()" style="padding:3px 10px;font-size:11px;">VERBIND</button>
+  <button class="btn" onclick="connectWS()" style="padding:3px 10px;font-size:11px;">CONNECT</button>
   <div style="color:var(--text3);font-size:11px;font-family:'Share Tech Mono',monospace;">
     ⓘ Start server.js op één laptop, voer het IP in op alle andere laptops
   </div>
   <div class="flight-count">
-    STRIPS IN ZICHT: <span id="myCount">0</span> &nbsp;|&nbsp; TOTAAL FIR: <span id="totalCount">0</span>
+    STRIPS IN VIEW: <span id="myCount">0</span> &nbsp;|&nbsp; TOTAL FIR: <span id="totalCount">0</span>
   </div>
 </div>
 
 <div class="main">
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="sidebar-title">Sectoren</div>
+    <div class="sidebar-title">Sectors</div>
     <div class="sector-nav" id="sectorNav"></div>
 
     <div class="wake-legend">
@@ -1006,7 +1043,7 @@
 <div class="modal-overlay hidden" id="addModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="addModalTitle">Nieuwe Vlucht</div>
+      <div class="modal-title" id="addModalTitle">New Flight</div>
       <button class="modal-close" onclick="closeModal('addModal')">✕</button>
     </div>
     <div class="modal-body">
@@ -1016,11 +1053,11 @@
           <input type="text" id="f_callsign" placeholder="KLM1234" style="text-transform:uppercase">
         </div>
         <div class="form-group">
-          <label>Vliegtuigtype</label>
+          <label>Aircraft Type</label>
           <input type="text" id="f_actype" placeholder="B738" style="text-transform:uppercase">
         </div>
         <div class="form-group">
-          <label>Wake Categorie</label>
+          <label>Wake Category</label>
           <select id="f_wake">
             <option value="J">J — Super Heavy (A380, AN-124)</option>
             <option value="H">H — Heavy (B744, B77W, A333)</option>
@@ -1029,7 +1066,7 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Vluchtfase</label>
+          <label>Flight Phase</label>
           <select id="f_phase">
             <option value="approach">Approach</option>
             <option value="landing">Landing</option>
@@ -1052,10 +1089,10 @@
           <select id="f_sector">
             <option>Schiphol Approach</option>
             <option>Schiphol Departure</option>
-            <option>Noord</option>
+            <option>North</option>
             <option>West</option>
-            <option>Zuid</option>
-            <option>Oost</option>
+            <option>South</option>
+            <option>East</option>
             <option>Unassigned</option>
           </select>
         </div>
@@ -1068,14 +1105,14 @@
           </select>
         </div>
         <div class="form-group full">
-          <label>Opmerking</label>
+          <label>Remarks</label>
           <textarea id="f_remark" placeholder="Bijv. RNAV, VFR, prioriteit, bijzonderheden..."></textarea>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn" onclick="closeModal('addModal')">Annuleer</button>
-      <button class="btn primary" onclick="saveFlight()">Opslaan</button>
+      <button class="btn" onclick="closeModal('addModal')">Cancel</button>
+      <button class="btn primary" onclick="saveFlight()">Save</button>
     </div>
   </div>
 </div>
@@ -1098,75 +1135,67 @@
 <div class="modal-overlay hidden" id="importModal">
   <div class="modal" style="width:580px">
     <div class="modal-header">
-      <div class="modal-title">Importeer BlueSky CSV</div>
+      <div class="modal-title">Import BlueSky CSV</div>
       <button class="modal-close" onclick="closeModal('importModal')">✕</button>
     </div>
     <div class="modal-body">
       <div class="import-area" onclick="document.getElementById('csvFileInput').click()">
         <input type="file" id="csvFileInput" accept=".csv,.txt,.scn" onchange="handleCSVFile(event)">
         <div class="import-icon">📂</div>
-        <p>Klik om een CSV of scenario bestand te kiezen</p>
-        <small>Verwacht kolommen: callsign, actype, wake, from, to, sector (of automatisch detecteren)</small>
+        <p>Click to select a CSV or scenario file</p>
+        <small>Expected columns: callsign, actype, wake, from, to, sector (auto-detected)</small>
       </div>
       <div class="csv-preview" id="csvPreview"></div>
       <div style="color:var(--text3);font-size:12px;margin-bottom:12px;font-family:'Share Tech Mono',monospace;">
-        <strong style="color:var(--text2)">CSV formaat — actieve vluchten:</strong><br>
-        callsign;actype;wake;from;to;sector;phase;remark<br>
-        KLM1234;B738;M;EHAM;EGLL;Schiphol Departure;departure;<br><br>
-        <strong style="color:var(--yellow)">CSV formaat — inkomende vluchten (buiten FIR):</strong><br>
-        callsign;actype;wake;from;to;sector;phase;remark;entryTime;entrySector<br>
-        <span style="color:var(--text2)">Zet sector op <strong>Inbound</strong>, entryTime = minuten na simulatiestart (bijv. 12.5), entrySector = welke sector ze binnenkomen</span><br>
-        DLH5432;A333;H;EDDM;EHAM;Inbound;cruise;;12;Noord<br>
-        BAW443;B788;H;EGLL;EHAM;Inbound;cruise;;8.5;West
+        <strong style="color:var(--text2)">CSV format (11 columns, semicolon-separated):</strong><br>
+        callsign;actype;wake;from;to;sector;phase;remark;spawntime;entrytime;entrysector<br><br>
+        <span style="color:var(--text2)">
+          <strong>sector</strong> = where it spawns (e.g. South, North, Schiphol Departure)<br>
+          <strong>spawntime</strong> = when it spawns in BlueSky (hh:mm:ss)<br>
+          <strong>entrytime</strong> = when strip appears in your view (hh:mm:ss) — adjust this<br>
+          <strong>entrysector</strong> = which sector the strip goes into (same as sector by default)<br>
+        </span>
+        KLM1234;B738;M;EHAM;EGLL;Schiphol Departure;departure;;00:01:30;00:01:30;Schiphol Departure<br>
+        DLH5432;A333;H;EDDM;EHAM;East;cruise;;00:00:00;00:12:00;Schiphol Approach
       </div>
       <div id="importResult" style="display:none;padding:10px;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:12px;"></div>
     </div>
     <div class="modal-footer">
-      <button class="btn" onclick="closeModal('importModal')">Sluiten</button>
-      <button class="btn primary" id="importConfirmBtn" onclick="confirmImport()" style="display:none">Importeer naar alle controllers</button>
+      <button class="btn" onclick="closeModal('importModal')">Close</button>
+      <button class="btn primary" id="importConfirmBtn" onclick="confirmImport()" style="display:none">Import to all controllers</button>
     </div>
   </div>
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- Inbound Bin Modal -->
-<div class="modal-overlay hidden" id="binModal">
-  <div class="modal" style="width:680px;max-height:80vh">
-    <div class="modal-header">
-      <div class="modal-title">📥 Inbound Bin — Vluchten die FIR binnenkomen</div>
-      <button class="modal-close" onclick="closeModal('binModal')">✕</button>
-    </div>
-    <div class="modal-body" style="padding:12px 16px;">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text3);">
-        <span>Huidige simtijd: <span id="binSimTime" style="color:var(--yellow)">T+00:00</span></span>
-        <span style="margin-left:auto">Strips verschijnen automatisch in de sector op het opgegeven moment. Of claim ze hier handmatig.</span>
-      </div>
-      <div id="binList" style="display:flex;flex-direction:column;gap:6px;max-height:55vh;overflow-y:auto;"></div>
-      <div id="binEmpty" style="text-align:center;padding:40px;color:var(--text3);font-size:13px;display:none;">
-        Geen inkomende vluchten in de bin.<br>
-        <small>Voeg vluchten toe met sector "Inbound" en een entryTime in het CSV.</small>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
 
-const SECTORS = ['Schiphol Approach','Schiphol Departure','Noord','West','Zuid','Oost','Unassigned'];
+const SECTORS = ['Schiphol Approach','Schiphol Departure','North','West','South','East','Unassigned'];
 
 const SECTOR_COLORS = {
   'Schiphol Approach': 'var(--sector-approach)',
   'Schiphol Departure': 'var(--sector-departure)',
-  'Noord': 'var(--sector-noord)',
+  'North': 'var(--sector-north)',
   'West': 'var(--sector-west)',
-  'Zuid': 'var(--sector-zuid)',
-  'Oost': 'var(--sector-oost)',
+  'South': 'var(--sector-south)',
+  'East': 'var(--sector-east)',
   'Unassigned': 'var(--sector-unassigned)'
 };
 
 const WAKE_COLORS = { J:'var(--wake-J)', H:'var(--wake-H)', M:'var(--wake-M)', L:'var(--wake-L)' };
+
+// Airport → sector mapping
+const AIRPORT_SECTOR = {
+  'EHAM': 'Schiphol Approach', 'EHKD': 'Schiphol Approach',
+  'EHRD': 'Schiphol Departure',
+  'EHLE': 'North', 'EHLW': 'North',
+  'EHGG': 'East',  'EHHO': 'East', 'EHTE': 'East',
+  'EHMZ': 'South', 'EHSE': 'South', 'EHGR': 'South',
+  'EHEH': 'South', 'EHVK': 'South', 'EHBK': 'South',
+};
+
 
 let state = {
   flights: {},
@@ -1195,7 +1224,7 @@ function startSim() {
   document.getElementById('simStartBtn').style.display = 'none';
   document.getElementById('simPauseBtn').style.display = 'inline-block';
   send({ type: 'SIM_START', payload: { startedAt: simStartTime } });
-  showToast('Simulatie gestart', 'success');
+  showToast('Simulation started', 'success');
 }
 
 function pauseSim() {
@@ -1209,39 +1238,43 @@ function resetSim() {
   pauseSim();
   simElapsedSeconds = 0;
   simStartTime = null;
-  document.getElementById('simTimer').textContent = 'T+00:00';
+  document.getElementById('simTimer').textContent = 'T+00:00:00';
   send({ type: 'SIM_RESET', payload: {} });
-  showToast('Simulatie gereset', 'info');
+  showToast('Simulation reset', 'info');
 }
 
 function simTick() {
   simElapsedSeconds = Math.floor((Date.now() - simStartTime) / 1000);
   document.getElementById('simTimer').textContent = 'T+' + formatSimTime(simElapsedSeconds);
   checkIncomingFlights();
-  renderBin();
 }
 
 function formatSimTime(totalSec) {
-  const m = Math.floor(totalSec / 60), s = totalSec % 60;
-  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 
-function simMinutes() { return simElapsedSeconds / 60; }
+function simSeconds() { return simElapsedSeconds; }
+
+function earlyWarnSeconds() {
+  const v = parseFloat(document.getElementById('earlyWarnInput')?.value || 10);
+  return isNaN(v) ? 10 : v;
+}
+
+// Convert "hh:mm:ss" string to total seconds
+function hhmmssToSeconds(s) {
+  if (!s) return null;
+  const parts = String(s).split(':');
+  if (parts.length === 3) return parseInt(parts[0])*3600 + parseInt(parts[1])*60 + parseFloat(parts[2]);
+  if (parts.length === 2) return parseInt(parts[0])*60 + parseFloat(parts[1]);
+  return parseFloat(s);
+}
 
 function checkIncomingFlights() {
-  const t = simMinutes();
-  let anyNew = false;
-  Object.values(state.flights).forEach(f => {
-    if (f.sector === 'Inbound' && f.entryTime != null && t >= parseFloat(f.entryTime) && !f._activated) {
-      const targetSector = f.entrySector || 'Unassigned';
-      const payload = { callsign: f.callsign, fromSector: 'Inbound', toSector: targetSector };
-      send({ type: 'HANDOFF', payload });
-      applyLocalMessage({ type: 'HANDOFF', payload });
-      showToast(`✈ ${f.callsign} → ${targetSector}  (T+${formatSimTime(Math.round(parseFloat(f.entryTime)*60))})`, 'warning');
-      anyNew = true;
-    }
-  });
-  if (anyNew) renderAll();
+  // renderStrips already handles filtering by time — just re-render each tick
+  renderAll();
 }
 
 // ─── WEBSOCKET ───────────────────────────────────────────────────────────────
@@ -1289,11 +1322,11 @@ function connectWS() {
       simInterval = setInterval(simTick, 1000);
       document.getElementById('simStartBtn').style.display = 'none';
       document.getElementById('simPauseBtn').style.display = 'inline-block';
-      showToast('Simulatie gestart door andere controller', 'info');
+      showToast('Simulation started by another controller', 'info');
     } else if (msg.type === 'SIM_RESET') {
       pauseSim();
       simElapsedSeconds = 0;
-      document.getElementById('simTimer').textContent = 'T+00:00';
+      document.getElementById('simTimer').textContent = 'T+00:00:00';
     }
   };
 
@@ -1303,7 +1336,7 @@ function connectWS() {
     setTimeout(() => {
       if (wsDisconnectTime && !wsAlertShown) {
         wsAlertShown = true;
-        showToast('Verbinding verbroken — herverbinden...', 'warning');
+        showToast('Connection lost — reconnecting...', 'warning');
       }
     }, 10000);
     setTimeout(connectWS, 3000);
@@ -1358,7 +1391,7 @@ function setConnStatus(s) {
   const dot = document.getElementById('connDot');
   const txt = document.getElementById('connText');
   dot.className = 'conn-dot ' + s;
-  txt.textContent = s === 'connected' ? 'LIVE' : s === 'connecting' ? 'VERBINDEN...' : 'OFFLINE';
+  txt.textContent = s === 'connected' ? 'LIVE' : s === 'connecting' ? 'CONNECTING...' : 'OFFLINE';
   txt.style.color = s === 'connected' ? 'var(--green)' : s === 'connecting' ? 'var(--yellow)' : 'var(--red)';
 }
 
@@ -1404,6 +1437,16 @@ function renderStrips() {
     (!search || f.callsign.toLowerCase().includes(search) || (f.actype||'').toLowerCase().includes(search))
   );
 
+  // Filter out staged (not yet visible) flights — based purely on sim time
+  const tNow = simSeconds();
+  const early = earlyWarnSeconds();
+  toShow = toShow.filter(f => {
+    if (!f.entrytime) return true;            // no timing = always show
+    if (!simRunning && simElapsedSeconds === 0) return false; // sim not started
+    const et = hhmmssToSeconds(f.entrytime);
+    return tNow + early >= et;               // show when within early-warn window
+  });
+
   // Respect manual order from sectorOrder, then sort remaining
   const orderKey = viewMode === 'mine' ? mySector : '__all__';
   const order = sectorOrder[orderKey] || [];
@@ -1423,8 +1466,8 @@ function renderStrips() {
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">✈</div>
-        <h3>Geen vluchten in ${viewMode === 'mine' ? mySector : 'FIR'}</h3>
-        <p>Importeer een CSV bestand of voeg handmatig een vlucht toe</p>
+        <h3>No flights in ${viewMode === 'mine' ? mySector : 'FIR'}</h3>
+        <p>Import a CSV file or add a flight manually</p>
       </div>`;
     return;
   }
@@ -1504,6 +1547,12 @@ function initDragDrop(container) {
 const PHASES = ['approach','landing','holding','departure','cruise','climbout'];
 
 function makeStrip(f) {
+  const tNow = simSeconds();
+  const etSec = f.entrytime ? hhmmssToSeconds(f.entrytime) : null;
+  const secLeft = etSec != null ? etSec - tNow : null;
+  const earlyTag = (secLeft != null && secLeft > 0 && simRunning)
+    ? `<span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--yellow);background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);padding:1px 6px;border-radius:3px;">T-${formatSimTime(Math.round(secLeft))}</span>`
+    : '';
   const wakeColor = WAKE_COLORS[f.wake] || WAKE_COLORS['M'];
   const div = document.createElement('div');
   div.className = `strip${f.status === 'handoff-pending' ? ' handoff-pending' : f.status === 'handoff-received' ? ' handoff-received' : ''}`;
@@ -1523,22 +1572,24 @@ function makeStrip(f) {
   const handoffPills = otherSectors.map(s => {
     const shortNames = {
       'Schiphol Approach':'APP','Schiphol Departure':'DEP',
-      'Noord':'NRD','West':'WST','Zuid':'ZLD','Oost':'OST','Centraal':'CTR'
+      'North':'NORTH','West':'WEST','South':'SOUTH','East':'EAST','Centraal':'CTR'
     };
     return `<button class="handoff-pill" onclick="selectHandoff(this,'${f.callsign}','${f.sector}','${s}')">${shortNames[s]||s}</button>`;
   }).join('');
 
   div.innerHTML = `
     <div class="strip-wake-bar" style="background:${wakeColor}"></div>
-    <div class="strip-drag" title="Sleep om te herordenen">⠿</div>
+    <div class="strip-drag" title="Drag to reorder">⠿</div>
     <div class="strip-body">
       <div class="strip-r1">
         <span class="strip-callsign">${f.callsign}</span>
         <span class="strip-actype">${f.actype || '----'}</span>
         <span class="wake-badge" style="background:${wakeColor}">${f.wake || 'M'}</span>
         <span class="strip-route"><span class="apt">${f.from||'????'}</span><span class="arr">→</span><span class="apt">${f.to||'????'}</span></span>
+        ${f.spawntime ? `<span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:0.5px;">${f.spawntime}</span>` : ''}
         ${viewMode === 'all' ? `<span class="strip-sector-tag" style="color:${sectorColor};border-color:${sectorColor}">${f.sector||''}</span>` : ''}
-        <button class="strip-del-btn" onclick="deleteFlight('${f.callsign}')" title="Verwijder">✕</button>
+        ${earlyTag}
+        <button class="strip-del-btn" onclick="deleteFlight('${f.callsign}')" title="Remove">✕</button>
       </div>
       <div class="strip-r2">
         ${phasePills}
@@ -1549,6 +1600,8 @@ function makeStrip(f) {
       <div class="strip-r3">
         <span class="strip-r3-label">HANDOFF TO→</span>
         ${handoffPills}
+        <button class="handoff-pill exit-pill" onclick="selectHandoff(this,'${f.callsign}','${f.sector}','__EXIT__')">✈ EXIT FIR</button>
+        <button class="handoff-pill landed-pill" onclick="selectHandoff(this,'${f.callsign}','${f.sector}','__LANDED__')">✔ LANDED</button>
         <button class="handoff-confirm" onclick="confirmHandoff(this)">✓ CONFIRM</button>
         <button class="handoff-cancel" onclick="cancelHandoff(this)">✕</button>
       </div>
@@ -1615,14 +1668,14 @@ function deleteFlight(cs) {
   send({ type: 'DELETE_FLIGHT', payload: { callsign: cs } });
   applyLocalMessage({ type: 'DELETE_FLIGHT', payload: { callsign: cs } });
   renderAll();
-  showToast(`${cs} verwijderd`, 'info');
+  showToast(`${cs} removed`, 'info');
 }
 
 // ─── ADD / EDIT MODAL ─────────────────────────────────────────────────────────
 
 function openAddModal() {
   editingCallsign = null;
-  document.getElementById('addModalTitle').textContent = 'Nieuwe Vlucht';
+  document.getElementById('addModalTitle').textContent = 'New Flight';
   document.getElementById('f_callsign').value = '';
   document.getElementById('f_callsign').disabled = false;
   document.getElementById('f_actype').value = '';
@@ -1656,7 +1709,7 @@ function openEditModal(cs) {
 
 function saveFlight() {
   const callsign = (editingCallsign || document.getElementById('f_callsign').value.toUpperCase().trim());
-  if (!callsign) { showToast('Callsign is verplicht', 'error'); return; }
+  if (!callsign) { showToast('Callsign is required', 'error'); return; }
 
   const flight = {
     callsign,
@@ -1674,12 +1727,12 @@ function saveFlight() {
   if (editingCallsign) {
     send({ type: 'UPDATE_FLIGHT', payload: { callsign, updates: flight } });
     applyLocalMessage({ type: 'UPDATE_FLIGHT', payload: { callsign, updates: flight } });
-    showToast(`${callsign} bijgewerkt`, 'success');
+    showToast(`${callsign} updated`, 'success');
   } else {
-    if (state.flights[callsign]) { showToast(`${callsign} bestaat al`, 'warning'); return; }
+    if (state.flights[callsign]) { showToast(`${callsign} already exists`, 'warning'); return; }
     send({ type: 'ADD_FLIGHT', payload: { flight } });
     applyLocalMessage({ type: 'ADD_FLIGHT', payload: { flight } });
-    showToast(`${callsign} toegevoegd aan ${flight.sector}`, 'success');
+    showToast(`${callsign} added to ${flight.sector}`, 'success');
   }
 
   closeModal('addModal');
@@ -1734,6 +1787,23 @@ function cancelHandoff(btn) {
 }
 
 function doHandoff(callsign, fromSector, toSector) {
+  if (toSector === '__EXIT__') {
+    // Flight leaves the FIR — delete it
+    if (!confirm(`${callsign} exits the FIR and will be removed. Confirm?`)) return;
+    send({ type: 'DELETE_FLIGHT', payload: { callsign } });
+    applyLocalMessage({ type: 'DELETE_FLIGHT', payload: { callsign } });
+    renderAll();
+    showToast(`✈ ${callsign} exited FIR`, 'info');
+    return;
+  }
+  if (toSector === '__LANDED__') {
+    if (!confirm(`${callsign} has landed — remove strip?`)) return;
+    send({ type: 'DELETE_FLIGHT', payload: { callsign } });
+    applyLocalMessage({ type: 'DELETE_FLIGHT', payload: { callsign } });
+    renderAll();
+    showToast(`✔ ${callsign} landed`, 'success');
+    return;
+  }
   send({ type: 'HANDOFF', payload: { callsign, fromSector, toSector } });
   applyLocalMessage({ type: 'HANDOFF', payload: { callsign, fromSector, toSector } });
   renderAll();
@@ -1741,6 +1811,7 @@ function doHandoff(callsign, fromSector, toSector) {
 }
 
 // ─── CSV IMPORT ───────────────────────────────────────────────────────────────
+// Expected columns: callsign;actype;wake;from;to;sector;phase;remark;spawntime;entrytime;entrysector
 
 function openImportModal() {
   pendingImport = null;
@@ -1755,96 +1826,70 @@ function handleCSVFile(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (ev) => {
-    const text = ev.target.result;
-    parseCSV(text, file.name);
-  };
+  reader.onload = (ev) => parseCSV(ev.target.result);
   reader.readAsText(file);
 }
 
-function parseCSV(text, filename) {
+function parseCSV(text) {
   const lines = text.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'));
   const preview = document.getElementById('csvPreview');
-  const result = document.getElementById('importResult');
+  const result  = document.getElementById('importResult');
   const confirmBtn = document.getElementById('importConfirmBtn');
 
-  // Detect delimiter
   const delim = lines[0].includes(';') ? ';' : ',';
-
-  // Check for header
-  const firstLine = lines[0].toLowerCase();
-  const hasHeader = firstLine.includes('callsign') || firstLine.includes('cs') || firstLine.includes('acid');
+  const firstLow = lines[0].toLowerCase();
+  const hasHeader = firstLow.includes('callsign') || firstLow.includes('actype');
   const dataLines = hasHeader ? lines.slice(1) : lines;
 
-  // Auto-detect BlueSky .scn format: "HH:MM:SS>CRE CALLSIGN,actype,lat,lon,hdg,fl,spd"
-  const isScn = filename.endsWith('.scn') || text.includes('>CRE ');
-
   const newFlights = {};
-  const newSectors = Object.fromEntries(SECTORS.map(s => [s, []]));
+  const newSectors = {};
+  [...SECTORS, 'Unassigned'].forEach(s => newSectors[s] = []);
+
   let parsed = 0, errors = 0;
 
-  // Wake category based on actype
-  function guessWake(actype) {
-    const t = (actype || '').toUpperCase();
-    if (['A388','A380','AN124','B748'].includes(t)) return 'J';
-    if (['B744','B743','B742','B74F','B77W','B77L','B772','B773','B763','B762','B764','A332','A333','A343','A345','A346','A35K','A359','B787','B788','B789','B78X','MD11'].some(x => t.startsWith(x) || t === x)) return 'H';
-    if (['B738','B737','B736','B739','B752','B753','A319','A320','A321','A318','E170','E175','E190','E195','CRJ','DH8','AT7','AT4'].some(x => t.startsWith(x))) return 'M';
-    return 'M';
-  }
+  dataLines.forEach(line => {
+    if (!line) return;
+    const cols = line.split(delim).map(c => c.trim().replace(/^"|"$/g, ''));
 
-  if (isScn) {
-    // Parse BlueSky scenario format
-    lines.forEach(line => {
-      const m = line.match(/>CRE\s+(\w+),(\w+),/i);
-      if (m) {
-        const cs = m[1].toUpperCase();
-        const ac = m[2].toUpperCase();
-        const wake = guessWake(ac);
-        newFlights[cs] = { callsign: cs, actype: ac, wake, phase: 'cruise', from: '????', to: '????', sector: 'Unassigned', status: 'active', remark: '' };
-        newSectors['Unassigned'].push(cs);
-        parsed++;
-      }
-    });
-  } else {
-    // Parse CSV
-    // Columns: callsign;actype;wake;from;to;sector;phase;remark
-    dataLines.forEach((line, i) => {
-      if (!line) return;
-      const cols = line.split(delim).map(c => c.trim().replace(/^"|"$/g, ''));
-      if (cols.length < 1) { errors++; return; }
+    const cs = (cols[0] || '').toUpperCase();
+    if (!cs) { errors++; return; }
 
-      const cs = (cols[0] || '').toUpperCase();
-      if (!cs) { errors++; return; }
+    const actype     = (cols[1] || '').toUpperCase();
+    const wake       = ['J','H','M','L'].includes((cols[2]||'').toUpperCase()) ? cols[2].toUpperCase() : 'M';
+    const from       = (cols[3] || '').toUpperCase();
+    const to         = (cols[4] || '').toUpperCase();
+    const sectorRaw  = cols[5] || '';
+    const sector     = SECTORS.find(s => s.toLowerCase() === sectorRaw.toLowerCase()) || 'Unassigned';
+    const phase      = cols[6] || 'cruise';
+    const remark     = cols[7] || '';
+    const spawntime  = cols[8] || '';   // hh:mm:ss
+    const entrytime  = cols[9] || '';   // hh:mm:ss — when strip appears (with early warn offset)
+    const entrysector = cols[10] || sector;  // which sector to place it in
 
-      const actype = (cols[1] || '').toUpperCase();
-      const wake = cols[2] && ['J','H','M','L'].includes(cols[2].toUpperCase()) ? cols[2].toUpperCase() : guessWake(actype);
-      const from = (cols[3] || '').toUpperCase() || '????';
-      const to = (cols[4] || '').toUpperCase() || '????';
-      const sectorRaw = cols[5] || '';
-      const sector = SECTORS.find(s => s.toLowerCase() === sectorRaw.toLowerCase()) || (sectorRaw.toLowerCase() === 'inbound' ? 'Inbound' : 'Unassigned');
-      const phase = cols[6] || 'cruise';
-      const remark = cols[7] || '';
-      const entryTime = cols[8] ? parseFloat(cols[8]) : null;   // minuten na sim start
-      const entrySector = cols[9] ? (SECTORS.find(s => s.toLowerCase() === cols[9].toLowerCase().trim()) || cols[9].trim()) : null;
+    const hasTiming = entrytime !== '';
+    const targetSector = entrysector || sector || 'Unassigned';
 
-      newFlights[cs] = { callsign: cs, actype, wake, from, to, sector, phase, remark, entryTime, entrySector, status: 'active', addedAt: Date.now() };
-      const sectorKey = sector === 'Inbound' ? 'Inbound' : sector;
-      if (!newSectors[sectorKey]) newSectors[sectorKey] = [];
-      newSectors[sectorKey].push(cs);
-      parsed++;
-    });
-  }
+    newFlights[cs] = {
+      callsign: cs, actype, wake, from, to,
+      sector: targetSector,
+      phase, remark, spawntime, entrytime, entrysector: targetSector,
+      status: 'active',
+    };
+
+    if (!newSectors[targetSector]) newSectors[targetSector] = [];
+    newSectors[targetSector].push(cs);
+    parsed++;
+  });
 
   preview.style.display = 'block';
-  preview.textContent = `Eerste 5 regels:\n${lines.slice(0, 5).join('\n')}`;
-
+  preview.textContent = `First 5 rows:\n${lines.slice(0, 5).join('\n')}`;
   result.style.display = 'block';
   result.style.background = parsed > 0 ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)';
-  result.style.border = `1px solid ${parsed > 0 ? 'var(--green)' : 'var(--red)'}`;
-  result.style.color = parsed > 0 ? 'var(--green)' : 'var(--red)';
-  result.textContent = parsed > 0
-    ? `✓ ${parsed} vluchten klaar om te importeren${errors > 0 ? ` (${errors} regels overgeslagen)` : ''}`
-    : `✗ Geen vluchten gevonden. Controleer het formaat.`;
+  result.style.border  = `1px solid ${parsed > 0 ? 'var(--green)' : 'var(--red)'}`;
+  result.style.color   = parsed > 0 ? 'var(--green)' : 'var(--red)';
+  result.textContent   = parsed > 0
+    ? `✓ ${parsed} flights ready to import${errors > 0 ? ` (${errors} skipped)` : ''}`
+    : `✗ No flights found. Check the format.`;
 
   if (parsed > 0) {
     pendingImport = { flights: newFlights, sectors: newSectors };
@@ -1858,7 +1903,7 @@ function confirmImport() {
   applyLocalMessage({ type: 'IMPORT_FLIGHTS', payload: pendingImport });
   renderAll();
   closeModal('importModal');
-  showToast(`${Object.keys(pendingImport.flights).length} vluchten geïmporteerd naar alle controllers`, 'success');
+  showToast(`${Object.keys(pendingImport.flights).length} flights imported to all controllers`, 'success');
   pendingImport = null;
 }
 
@@ -1903,96 +1948,6 @@ document.addEventListener('keydown', e => {
   if (e.key === 'f' && !e.target.closest('input,textarea,select')) document.getElementById('searchInput').focus();
 });
 
-// ─── INBOUND BIN ─────────────────────────────────────────────────────────────
-
-function openBinModal() {
-  renderBin();
-  openModal('binModal');
-}
-
-function renderBin() {
-  const inbound = Object.values(state.flights).filter(f => f.sector === 'Inbound');
-  const binList = document.getElementById('binList');
-  const binEmpty = document.getElementById('binEmpty');
-  const binCount = document.getElementById('binCount');
-  const binSimTimeEl = document.getElementById('binSimTime');
-
-  if (binSimTimeEl) binSimTimeEl.textContent = 'T+' + formatSimTime(simElapsedSeconds);
-
-  // Update bin badge op de knop
-  const pendingBin = inbound.length;
-  if (binCount) {
-    binCount.textContent = pendingBin;
-    binCount.style.display = pendingBin > 0 ? 'flex' : 'none';
-  }
-
-  if (!binList) return;
-
-  if (inbound.length === 0) {
-    binList.innerHTML = '';
-    if (binEmpty) binEmpty.style.display = 'block';
-    return;
-  }
-  if (binEmpty) binEmpty.style.display = 'none';
-
-  // Sorteer op entryTime
-  inbound.sort((a, b) => (a.entryTime || 999) - (b.entryTime || 999));
-
-  const t = simMinutes();
-  binList.innerHTML = '';
-  inbound.forEach(f => {
-    const wakeColor = WAKE_COLORS[f.wake] || WAKE_COLORS['M'];
-    const eta = f.entryTime != null ? parseFloat(f.entryTime) : null;
-    const remaining = eta != null ? eta - t : null;
-    const isOverdue = remaining != null && remaining < 0;
-    const isSoon = remaining != null && remaining >= 0 && remaining <= 3;
-
-    const div = document.createElement('div');
-    div.style.cssText = `display:grid;grid-template-columns:6px 1fr auto;background:var(--panel);border:1px solid ${isOverdue ? 'var(--red)' : isSoon ? 'var(--yellow)' : 'var(--border)'};border-radius:5px;overflow:hidden;`;
-
-    const etaLabel = eta != null
-      ? `T+${formatSimTime(Math.round(eta * 60))}`
-      : '??:??';
-    const remainLabel = remaining != null
-      ? (isOverdue ? `<span style="color:var(--red)">OVERDUE</span>` : `<span style="color:${isSoon ? 'var(--yellow)' : 'var(--text2)'}">nog ${remaining.toFixed(1)} min</span>`)
-      : '';
-
-    div.innerHTML = `
-      <div style="background:${wakeColor}"></div>
-      <div style="padding:8px 12px;">
-        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:3px;">
-          <span style="font-family:'Share Tech Mono',monospace;font-size:16px;color:#fff;">${f.callsign}</span>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text2);">${f.actype||'----'}</span>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:bold;padding:1px 5px;border-radius:2px;background:${wakeColor};color:#000">${f.wake||'M'}</span>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent);">${f.from||'????'} → ${f.to||'????'}</span>
-        </div>
-        <div style="display:flex;gap:12px;font-size:11px;font-family:'Share Tech Mono',monospace;">
-          <span style="color:var(--text3);">Inkomsttijd: <strong style="color:var(--text)">${etaLabel}</strong></span>
-          ${remainLabel ? `<span>${remainLabel}</span>` : ''}
-          ${f.entrySector ? `<span style="color:var(--text3);">→ <strong style="color:${SECTOR_COLORS[f.entrySector]||'var(--text)'}">${f.entrySector}</strong></span>` : ''}
-          ${f.remark ? `<span style="color:var(--yellow);font-style:italic;">⚑ ${f.remark}</span>` : ''}
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;">
-        <button class="strip-btn" onclick="claimFromBin('${f.callsign}')" style="font-size:11px;padding:4px 10px;border-color:var(--green);color:var(--green);">✓ CLAIM</button>
-        <button class="strip-btn delete-btn" onclick="deleteFlight('${f.callsign}')">✕</button>
-      </div>`;
-    binList.appendChild(div);
-  });
-}
-
-function claimFromBin(cs) {
-  const f = state.flights[cs];
-  if (!f) return;
-  const target = f.entrySector || mySector;
-  const payload = { callsign: cs, fromSector: 'Inbound', toSector: target };
-  send({ type: 'HANDOFF', payload });
-  applyLocalMessage({ type: 'HANDOFF', payload });
-  renderAll();
-  renderBin();
-  showToast(`${cs} geclaimd → ${target}`, 'success');
-}
-
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 setMySector('Schiphol Approach');
@@ -2005,7 +1960,7 @@ setTimeout(() => {
       { callsign: 'KLM1234', actype: 'B738', wake: 'M', from: 'EGLL', to: 'EHAM', sector: 'Schiphol Approach', phase: 'approach', status: 'active', remark: '' },
       { callsign: 'EZY4521', actype: 'A320', wake: 'M', from: 'LFPG', to: 'EHAM', sector: 'Schiphol Approach', phase: 'holding', status: 'active', remark: 'Holding SPL' },
       { callsign: 'BAW443',  actype: 'B788', wake: 'H', from: 'EGLL', to: 'EHAM', sector: 'Schiphol Approach', phase: 'approach', status: 'handoff-received', remark: '' },
-      { callsign: 'DLH5432', actype: 'A333', wake: 'H', from: 'EDDM', to: 'EHAM', sector: 'Noord', phase: 'cruise', status: 'active', remark: '' },
+      { callsign: 'DLH5432', actype: 'A333', wake: 'H', from: 'EDDM', to: 'EHAM', sector: 'North', phase: 'cruise', status: 'active', remark: '' },
       { callsign: 'AFR1890', actype: 'A388', wake: 'J', from: 'LFPG', to: 'EHAM', sector: 'West', phase: 'cruise', status: 'handoff-pending', remark: 'SUPER - extra sep!' },
       { callsign: 'RYR789',  actype: 'B738', wake: 'M', from: 'EHAM', to: 'LEMD', sector: 'Schiphol Departure', phase: 'departure', status: 'active', remark: '' },
     ];
@@ -2014,7 +1969,7 @@ setTimeout(() => {
     demo.forEach(f => { f.addedAt = Date.now(); flights[f.callsign] = f; sectors[f.sector].push(f.callsign); });
     state = { flights, sectors };
     renderAll();
-    showToast('Demo data geladen (geen server)', 'info');
+    showToast('Demo data loaded (no server)', 'info');
   }
 }, 2500);
 </script>
