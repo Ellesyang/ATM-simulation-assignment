@@ -9,3 +9,4 @@
 00:00:00.50> AREA FIRNL
 00:00:00.00> call ATM/APP/EHKD
 00:00:00.00> call ATM/Dep_EHAM/extra_waypoints_assignment_depEHAM
+00:00:00.00> call eham/deffix
