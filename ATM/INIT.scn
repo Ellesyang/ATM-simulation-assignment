@@ -10,3 +10,5 @@
 00:00:00.00> call ATM/APP/EHKD
 00:00:00.00> call ATM/Dep_EHAM/extra_waypoints_assignment_depEHAM
 00:00:00.00> call eham/deffix
+00:00:00.00> call ATM/WEST/ORDENS
+00:00:00.00> call ATM/SOUTH/Waypoints_south
