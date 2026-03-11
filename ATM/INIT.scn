@@ -1,8 +1,8 @@
 00:00:00.00> call ATM/TrafficSWjsf
 00:00:00.00> call ATM/sectors
 00:00:00.00> call ATM/WEST/waypoints_west
-00:00:00.00> call ATM/APP/RNW
 00:00:00.00> call ATM/APP/WPT
+00:00:00.00> call ATM/APP/RNW
 00:00:00.00> call ATM/APP/ROUTES
 00:00:00.00> call ATM/Dep_EHAM/extra_waypoints_assignment_depEHAM
 00:00:00.00> call eham/deffix
