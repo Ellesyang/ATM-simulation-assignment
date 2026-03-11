@@ -9,6 +9,7 @@
 00:00:00.00> call ATM/SOUTH/Waypoints_south
 00:00:00.00> call ATM/NORTH/Abel_waypoints
 00:00:00.00> call ATM/SOUTH/extra_wpt_maastricht
+00:00:00.00> call ATM/NORTH/Abel_waypoints.SCN
 00:00:01.00> HOLD
 00:00:00.00> ASAS ON
 00:00:00.00> RESO OFF
