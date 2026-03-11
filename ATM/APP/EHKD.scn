@@ -5,7 +5,7 @@
 00:02:31.00>NH-516 LNAV ON
 00:11:57.00>NH-770 LNAV ON
 
-00:00:01.00>NH-823 atdist WADTEX 3 pcall atm/app/27 NH-823
+00:00:01.00>NH-823 atdist RIN5 3 pcall atm/app/27 NH-823
 00:16:40.00>PH-DWM atdist WADTEX 3 pcall atm/app/27 PH-DWM
 00:16:41.00>NH-287 atdist WADTEX 3 pcall atm/app/27 NH-287
 00:27:48.00>NH-270 atdist WADTEX 3 pcall atm/app/27 NH-270
