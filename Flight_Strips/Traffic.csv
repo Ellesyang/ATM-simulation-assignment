@@ -1,0 +1,264 @@
+callsign;actype;wake;from;to;sector;phase;remark;spawntime;entrytime;entrysector
+KLM946;B737;M;EHAM;LFRS;Schiphol Departure;departure;;00:00:00;00:00:00;Schiphol Departure
+KLM914;B738;M;EHRD;LEIB;Schiphol Departure;departure;;00:00:00;00:00:00;Schiphol Departure
+VF576;B738;M;EHEH;LIRP;South;departure;;00:00:00;00:00:00;South
+PH-GLO;P28R;L;EHGG;EHHO;East;departure;;00:00:00;00:00:00;East
+NH-655;A139;L;EHKD;;Schiphol Approach;departure;;00:00:00;00:00:00;Schiphol Approach
+PH-MPI;DA42;L;EHLE;EHGG;North;departure;;00:00:00;00:00:00;North
+J-811;F35;M;EHVK;;South;departure;;00:00:00;00:00:00;South
+J-501;F35;M;EHLE;DON;North;departure;;00:00:00;00:00:00;North
+KLM746;B738;M;EBAW;EHRD;Inbound;cruise;;00:00:00;00:00:00;South
+KLM205;B738;M;EDWF;EHRD;Inbound;cruise;;00:00:00;00:02:30;East
+KLM646;B744;H;EGLL;EHAM;Inbound;cruise;;00:00:00;00:00:00;West
+KLM158;B738;M;EDDT;EHAM;Inbound;cruise;;00:00:00;00:00:00;East
+TRA347;B737;M;LEGE;EHRD;Inbound;cruise;;00:00:00;00:00:00;South
+TRA794;A320;M;EPWR;EHEH;Inbound;cruise;;00:00:00;00:00:00;East
+KLM568;CRJ7;M;EDDM;EHGG;Inbound;cruise;;00:00:00;00:00:00;East
+NH-823;A139;L;;EHKD;Inbound;cruise;;00:00:00;00:00:00;South
+KLM216;E190;M;LIME;EHLE;Inbound;cruise;;00:00:00;00:00:00;South
+KLM958_2;E75L;M;EHAM;ELLX;Schiphol Departure;departure;;00:00:00;00:00:00;Schiphol Departure
+KLM263;A320;M;LMML;EHAM;Inbound;cruise;;00:00:13;00:00:13;South
+J-502;F35;M;EHLE;DON;North;departure;;00:00:14;00:00:14;North
+J-503;F35;M;EHLE;DON;North;departure;;00:00:16;00:00:16;North
+J-504;F35;M;EHLE;DON;North;departure;;00:00:18;00:00:18;North
+TRA164;A319;M;LIEO;EHAM;Inbound;cruise;;00:00:45;00:00:45;South
+KLM347;DH8D;M;EGHI;EHAM;Inbound;cruise;;00:00:49;00:00:49;West
+KLM503;A320;M;EHAM;LPPT;Schiphol Departure;departure;;00:01:30;00:01:30;Schiphol Departure
+KLM761;E190;M;LIME;EHLE;Inbound;cruise;;00:01:32;00:01:32;South
+KLM929;B738;M;EIDW;EHEH;Inbound;cruise;;00:02:03;00:02:03;West
+KLM513;B737;M;LEAL;EHRD;Inbound;cruise;;00:02:12;00:02:12;South
+FB591;B738;M;EHEH;LIRA;South;departure;;00:02:18;00:02:18;South
+NH-516;A139;L;EHKD;;Schiphol Approach;departure;;00:02:31;00:02:31;Schiphol Approach
+KLM571;B737;M;EGPD;EHAM;Inbound;cruise;;00:02:46;00:02:46;West
+KLM673;B738;M;EHAM;LTAI;Schiphol Departure;departure;;00:03:00;00:03:00;Schiphol Departure
+KLM475;B744;H;EDDW;EHAM;Inbound;cruise;;00:03:13;00:03:13;East
+TRA784;B738;M;GCTS;EHRD;Inbound;cruise;;00:03:16;00:03:16;South
+TRA510;E190;M;LIME;EHLE;Inbound;cruise;;00:04:19;00:04:19;South
+KLM223;C55B;M;EHAM;EDDM;Schiphol Departure;departure;;00:04:30;00:04:30;Schiphol Departure
+KLM492;A319;M;EGGP;EHAM;Inbound;cruise;;00:04:53;00:04:53;West
+KLM960;B739;M;LEBL;EHAM;Inbound;cruise;;00:04:55;00:04:55;South
+KLM941;E75L;M;LFLL;EHAM;Inbound;cruise;;00:05:08;00:05:08;South
+TRA728;E75L;M;EGHI;EHAM;Inbound;cruise;;00:05:14;00:05:14;West
+KLM603;B738;M;EKCH;EHAM;Inbound;cruise;;00:05:28;00:05:28;East
+KLM224;E190;M;EHAM;ESGG;Schiphol Departure;departure;;00:06:00;00:06:00;Schiphol Departure
+TRA745;B738;M;LDSP;EHRD;Inbound;cruise;;00:06:18;00:06:18;South
+KLM440;B739;M;EGPH;EHAM;Inbound;cruise;;00:06:30;00:06:30;West
+TRA795;B738;M;;EHRD;Inbound;cruise;;00:06:43;00:06:43;West
+KLM648;A333;H;EGLL;EHAM;Inbound;cruise;;00:06:55;00:06:55;West
+TRA497;E190;M;LIME;EHLE;Inbound;cruise;;00:07:53;00:07:53;South
+KLM403;B738;M;EHEH;LEAL;South;departure;;00:08:34;00:08:34;South
+KLM935;E75L;M;LOWG;EHAM;Inbound;cruise;;00:08:35;00:08:35;South
+KLM344;A320;M;EHAM;LSZH;Schiphol Departure;departure;;00:08:49;00:08:49;Schiphol Departure
+KLM812;A320;M;EIDW;EHAM;Inbound;cruise;;00:09:42;00:09:42;West
+J201;F35;M;EHLE;;North;departure;;00:10:00;00:10:00;North
+J202;F35;M;EHLE;;North;departure;;00:10:02;00:10:02;North
+TRA985;B737;M;LFMN;EHAM;Inbound;cruise;;00:10:07;00:10:07;South
+J203;F35;M;EHLE;;North;departure;;00:10:10;00:10:10;North
+J204;F35;M;EHLE;;North;departure;;00:10:12;00:10:12;North
+TRA576;B737;M;EHAM;LFLL;Schiphol Departure;departure;;00:10:19;00:10:19;Schiphol Departure
+TRA879;DH8D;M;EGHI;EHAM;Inbound;cruise;;00:10:22;00:10:22;West
+KLM288;A332;H;GLRB;EHAM;Inbound;cruise;;00:10:23;00:10:23;South
+TRA191;B738;M;EDWF;EHRD;Inbound;cruise;;00:11:10;00:13:30;East
+KLM487;B738;M;ESSA;EHEH;Inbound;cruise;;00:11:15;00:11:15;East
+KLM219;E190;M;EHAM;LSGG;Schiphol Departure;departure;;00:11:49;00:11:49;Schiphol Departure
+KLM351;E190;M;EGPD;EHAM;Inbound;cruise;;00:11:51;00:11:51;West
+KLM486;E190;M;LEBB;EHAM;Inbound;cruise;;00:11:54;00:11:54;South
+NH-770;EC75;L;EHKD;;Schiphol Approach;departure;;00:11:56;00:11:56;Schiphol Approach
+KLM669;B738;M;LKPR;EHEH;Inbound;cruise;;00:11:59;00:11:59;South
+J-505;F35;M;EHLE;DON;North;departure;;00:12:00;00:12:00;North
+J-506;F35;M;EHLE;DON;North;departure;;00:12:00;00:12:00;North
+J-507;F35;M;EHLE;DON;North;departure;;00:12:00;00:12:00;North
+J-508;F35;M;EHLE;DON;North;departure;;00:12:00;00:12:00;North
+TRA466;TB20;L;EHGG;EDDW;East;departure;;00:12:13;00:12:13;East
+KLM398;A320;M;EICK;EHAM;Inbound;cruise;;00:12:15;00:12:15;West
+KLM108;B744;H;EGLC;EHAM;Inbound;cruise;;00:12:34;00:12:34;West
+TRA699;B738;M;LIRN;EHAM;Inbound;cruise;;00:12:49;00:12:49;South
+PH-NWB;C550;L;EHRD;EHBK;Schiphol Departure;departure;;00:13:08;00:13:08;Schiphol Departure
+ST947;B737;M;EHAM;ENGM;Schiphol Departure;departure;;00:13:19;00:13:19;Schiphol Departure
+KLM958;B738;M;LGSA;EHAM;Inbound;cruise;;00:13:28;00:13:28;South
+DL599;E190;M;ENBR;EHAM;Inbound;cruise;;00:14:46;00:14:46;North
+PH-TUT;TB20;L;EHLE;EHRD;North;departure;;00:14:49;00:14:49;North
+KLM598;E190;M;EHAM;LFBD;Schiphol Departure;departure;;00:14:50;00:14:50;Schiphol Departure
+KLM300;B77W;H;EGLC;EHAM;Inbound;cruise;;00:15:30;00:15:30;West
+TRA460;E190;M;EGGD;EHAM;Inbound;cruise;;00:15:35;00:15:35;West
+PH-DKJ;C550;L;EHRD;EHBK;Schiphol Departure;departure;;00:15:37;00:15:37;Schiphol Departure
+KLM236;B744;H;EGKK;EHAM;Inbound;cruise;;00:15:41;00:15:41;West
+KLM713;E75L;M;EGFF;EHAM;Inbound;cruise;;00:15:45;00:15:45;West
+TRA651;A319;M;LIML;EHAM;Inbound;cruise;;00:16:20;00:16:20;South
+PH-DWM;A139;L;EHLE;EHKD;North;departure;;00:16:40;00:16:40;North
+NH-287;EC35;L;EHGR;EHKD;South;departure;;00:16:41;00:16:41;South
+KLM681;E190;M;ESGG;EHAM;Inbound;cruise;;00:17:11;00:17:11;North
+TRA295;B738;M;LGZA;EHAM;Inbound;cruise;;00:18:00;00:18:00;South
+KLM577;B789;H;CYYZ;EHAM;Inbound;cruise;;00:19:22;00:19:22;South
+TRA282;CRJ9;M;EDDM;EHAM;Inbound;cruise;;00:19:23;00:19:23;South
+KLM239;A321;M;LFPG;EHAM;Inbound;cruise;;00:19:41;00:19:41;South
+J-111;F35;M;EHVK;;South;departure;;00:20:02;00:20:02;South
+J-523;F35;M;EHLE;;North;departure;;00:20:06;00:20:06;North
+KLM699;B77W;H;EBBR;EHAM;Inbound;cruise;;00:20:09;00:20:09;South
+KLM136;B738;M;EDGS;EHBK;Inbound;cruise;;00:20:28;00:20:28;South
+J205;F35;M;EHLE;;North;departure;;00:21:00;00:21:00;North
+J206;F35;M;EHLE;;North;departure;;00:21:02;00:21:02;North
+J207;F35;M;EHLE;;North;departure;;00:21:10;00:21:10;North
+J211;F35;M;EHLE;;North;departure;;00:21:10;00:21:10;North
+J215;F35;M;EHLE;;North;departure;;00:21:10;00:21:10;North
+J227;F35;M;EHLE;;North;departure;;00:21:10;00:21:10;North
+J208;F35;M;EHLE;;North;departure;;00:21:12;00:21:12;North
+J212;F35;M;EHLE;;North;departure;;00:21:12;00:21:12;North
+J216;F35;M;EHLE;;North;departure;;00:21:12;00:21:12;North
+J228;F35;M;EHLE;;North;departure;;00:21:12;00:21:12;North
+J-751;F35;M;EHLE;;North;departure;;00:21:32;00:21:32;North
+J-905;EC35;L;EHVK;EHAM;South;departure;;00:21:36;00:21:36;South
+KLM157;B738;M;LIRF;EHAM;Inbound;cruise;;00:21:41;00:21:41;South
+TRA753;B738;M;EHAM;ESSA;Schiphol Departure;departure;;00:21:42;00:21:42;Schiphol Departure
+TRA504;B738;M;GCTS;EHRD;Inbound;cruise;;00:22:19;00:22:19;South
+KLM796;A333;H;ELLX;EHAM;Inbound;cruise;;00:22:28;00:22:28;South
+AL787;B738;M;LGZA;EHAM;Inbound;cruise;;00:22:54;00:22:54;South
+J-502_2;FGTN;M;EHVK;;South;departure;;00:23:02;00:23:02;South
+J-832;F35;M;EHVK;;South;departure;;00:23:06;00:23:06;South
+KLM431;E75L;M;EHAM;ENTO;Schiphol Departure;departure;;00:23:12;00:23:12;Schiphol Departure
+J240;F35;M;EHLE;;North;departure;;00:23:12;00:23:12;North
+KLM276;E190;M;LIPE;EHAM;Inbound;cruise;;00:24:15;00:24:15;South
+KLM711;B738;M;EHEH;LEVC;South;departure;;00:24:20;00:24:20;South
+J-868;F35;M;EHLE;;North;departure;;00:24:32;00:24:32;North
+KLM251;B738;M;LEMG;EHRD;Inbound;cruise;;00:24:45;00:24:45;South
+JA745;B744;H;EDDH;EHAM;Inbound;cruise;;00:25:04;00:25:04;East
+J-332;F35;M;EHVK;;South;departure;;00:25:22;00:25:22;South
+KLM902;B738;M;EIDW;EHEH;Inbound;cruise;;00:25:50;00:25:50;West
+TRA581;B738;M;EGLC;EHAM;Inbound;cruise;;00:25:52;00:25:52;West
+J-535;FGTN;M;EHVK;;South;departure;;00:26:02;00:26:02;South
+TRA545;B738;M;LEIB;EHRD;Inbound;cruise;;00:26:11;00:26:11;South
+J209;F35;M;EHLE;;North;departure;;00:27:00;00:27:00;North
+J210;F35;M;EHLE;;North;departure;;00:27:02;00:27:02;North
+J226;F35;M;EHLE;;North;departure;;00:27:02;00:27:02;North
+KLM472;B737;M;EKCH;EHAM;Inbound;cruise;;00:27:28;00:27:28;East
+J-186;F35;M;EHVK;;South;departure;;00:27:32;00:27:32;South
+NH-270;A139;L;;EHKD;Inbound;cruise;;00:27:48;00:27:48;North
+KLM250;A320;M;LEMD;EHAM;Inbound;cruise;;00:28:02;00:28:02;South
+OK170;E190;M;LIME;EHLE;Inbound;cruise;;00:28:18;00:28:18;South
+J-603;F35;M;EHLE;;North;departure;;00:29:03;00:29:03;North
+KLM235;B737;M;EDDM;EHAM;Inbound;cruise;;00:29:04;00:29:04;South
+KLM634;E190;M;LIME;EHLE;Inbound;cruise;;00:29:07;00:29:07;South
+ZG632;B738;M;EDDM;EHAM;Inbound;cruise;;00:30:04;00:30:04;South
+KLM878;B737;M;EHRD;GCLP;Schiphol Departure;departure;;00:30:11;00:30:11;Schiphol Departure
+KLM637;A320;M;EKCH;EHAM;Inbound;cruise;;00:30:14;00:30:14;East
+KLM866;E190;M;EHAM;EDDL;Schiphol Departure;departure;;00:30:40;00:30:40;Schiphol Departure
+TRA825;E190;M;EGBB;EHAM;Inbound;cruise;;00:30:53;00:30:53;West
+TRA978;B738;M;LICC;EHEH;Inbound;cruise;;00:31:00;00:31:00;South
+KLM686;A321;M;LTFJ;EHAM;Inbound;cruise;;00:31:04;00:31:04;South
+KLM659;B738;M;LFPG;EHAM;Inbound;cruise;;00:31:55;00:31:55;South
+J213;F35;M;EHLE;;North;departure;;00:32:00;00:32:00;North
+J214;F35;M;EHLE;;North;departure;;00:32:02;00:32:02;North
+EI313;B744;H;EDDK;EHAM;Inbound;cruise;;00:32:04;00:32:04;South
+KLM172;E75L;M;EHAM;ESSL;Schiphol Departure;departure;;00:32:10;00:32:10;Schiphol Departure
+J-276;FGTN;M;EHVK;;South;departure;;00:33:22;00:33:22;South
+KLM848;B744;H;EDDF;EHAM;Inbound;cruise;;00:33:30;00:33:30;South
+TRA760;B738;M;EHAM;ULLI;Schiphol Departure;departure;;00:33:40;00:33:40;Schiphol Departure
+TRA842;B737;M;LEAL;EHRD;Inbound;cruise;;00:34:10;00:34:10;South
+KLM343;A333;H;EHAM;ZGGG;Schiphol Departure;departure;;00:35:10;00:35:10;Schiphol Departure
+KLM153;B738;M;EDDM;EHAM;Inbound;cruise;;00:35:14;00:35:14;South
+KLM653;B744;H;EGLC;EHAM;Inbound;cruise;;00:35:43;00:35:43;West
+KLM585;E190;M;EHAM;EGLC;Schiphol Departure;departure;;00:36:41;00:36:41;Schiphol Departure
+J217;F35;M;EHLE;;North;departure;;00:37:00;00:37:00;North
+KLM213;B789;H;KIAH;EHAM;Inbound;cruise;;00:37:00;00:37:00;South
+J218;F35;M;EHLE;;North;departure;;00:37:02;00:37:02;North
+TRA589;B738;M;EIDW;EHAM;Inbound;cruise;;00:37:52;00:37:52;West
+KLM969;B738;M;LEAL;EHBK;Inbound;cruise;;00:38:08;00:38:08;South
+J219;F35;M;EHLE;;North;departure;;00:38:10;00:38:10;North
+KLM728;B737;M;EHAM;LFBD;Schiphol Departure;departure;;00:38:11;00:38:11;Schiphol Departure
+J220;F35;M;EHLE;;North;departure;;00:38:12;00:38:12;North
+KLM709;B737;M;LOWW;EHRD;Inbound;cruise;;00:38:32;00:38:32;South
+EX794;E190;M;LIME;EHLE;Inbound;cruise;;00:39:10;00:39:10;South
+KLM586;A320;M;EHAM;LOWW;Schiphol Departure;departure;;00:39:41;00:39:41;Schiphol Departure
+KLM347_2;B738;M;EDKA;EHBK;Inbound;cruise;;00:39:45;00:39:45;South
+TRA450;B737;M;EHAM;ESGG;Schiphol Departure;departure;;00:40:37;00:40:37;Schiphol Departure
+J221;F35;M;EHLE;;North;departure;;00:41:00;00:41:00;North
+J222;F35;M;EHLE;;North;departure;;00:41:02;00:41:02;North
+TRA781;A333;H;LTBA;EHAM;Inbound;cruise;;00:41:02;00:41:02;South
+J223;F35;M;EHLE;;North;departure;;00:41:10;00:41:10;North
+J224;F35;M;EHLE;;North;departure;;00:41:12;00:41:12;North
+J-980;EC35;L;EHVK;EHAM;South;departure;;00:41:24;00:41:24;South
+TRA220;B763;H;EHAM;KIAD;Schiphol Departure;departure;;00:42:07;00:42:07;Schiphol Departure
+KLM923;C680;M;EGLF;EHTE;Inbound;cruise;;00:42:16;00:42:16;West
+AT827;B738;M;EHAM;EKCH;Schiphol Departure;departure;;00:42:43;00:42:43;Schiphol Departure
+KLM612;E190;M;LIME;EHLE;Inbound;cruise;;00:42:49;00:42:49;South
+J-748;FGTN;M;EHVK;;South;departure;;00:42:54;00:42:54;South
+KLM864;A320;M;EHAM;LIRF;Schiphol Departure;departure;;00:43:37;00:43:37;Schiphol Departure
+KLM265;B738;M;LIRA;EHEH;Inbound;cruise;;00:43:51;00:43:51;South
+KLM606;B737;M;EHAM;ESSA;Schiphol Departure;departure;;00:44:13;00:44:13;Schiphol Departure
+KLM182;B763;H;LLBG;EHAM;Inbound;cruise;;00:44:27;00:44:27;South
+KLM591;PC12;L;EHLE;EBAW;North;departure;;00:44:55;00:44:55;North
+J-584;F35;M;;EHVK;Inbound;cruise;;00:45:00;00:45:00;West
+J-796;F35;M;;EHVK;Inbound;cruise;;00:45:01;00:45:01;West
+KLM649;B738;M;EHAM;LGKL;Schiphol Departure;departure;;00:45:07;00:45:07;Schiphol Departure
+J-389;F35;M;;EHVK;Inbound;cruise;;00:45:10;00:45:10;West
+J-651;F35;M;;EHVK;Inbound;cruise;;00:45:11;00:45:11;West
+J-617;F35;M;;EHVK;Inbound;cruise;;00:45:14;00:45:14;West
+J-824;F35;M;;EHVK;Inbound;cruise;;00:45:22;00:45:22;West
+J-716;F35;M;;EHVK;Inbound;cruise;;00:45:23;00:45:23;West
+J-194;F35;M;;EHVK;Inbound;cruise;;00:45:23;00:45:23;West
+J-771;F35;M;;EHVK;Inbound;cruise;;00:45:25;00:45:25;West
+KLM951;B744;H;EGMC;EHAM;Inbound;cruise;;00:45:26;00:45:26;West
+KLM726;E190;M;EGGD;EHAM;Inbound;cruise;;00:45:26;00:45:26;West
+J-368;F35;M;;EHVK;Inbound;cruise;;00:45:28;00:45:28;West
+KLM645;CRJ9;M;EHAM;EDDM;Schiphol Departure;departure;;00:45:43;00:45:43;Schiphol Departure
+KLM680;F100;M;EGPD;EHAM;Inbound;cruise;;00:46:05;00:46:05;West
+TRA251;B738;M;EGSS;EHAM;Inbound;cruise;;00:46:08;00:46:08;West
+QO309;B738;M;LEAL;EHAM;Inbound;cruise;;00:46:17;00:46:17;South
+KLM654;B738;M;EHAM;LFPO;Schiphol Departure;departure;;00:46:37;00:46:37;Schiphol Departure
+J-365;F35;M;;EHVK;Inbound;cruise;;00:46:48;00:46:48;West
+KLM963;DR40;L;EHRD;EBSP;Schiphol Departure;departure;;00:47:08;00:47:08;Schiphol Departure
+PH-EOS;C550;L;EHAM;EHRD;Schiphol Departure;departure;;00:47:13;00:47:13;Schiphol Departure
+KLM865;A333;H;EDDH;EHAM;Inbound;cruise;;00:47:16;00:47:16;East
+KLM712;E190;M;LIME;EHLE;Inbound;cruise;;00:47:17;00:47:17;South
+KLM189;B738;M;EHAM;LPPT;Schiphol Departure;departure;;00:48:07;00:48:07;Schiphol Departure
+PH-EFJ;B789;H;KIAH;EHAM;Inbound;cruise;;00:48:31;00:48:31;South
+KLM803;F100;M;EHAM;LFLC;Schiphol Departure;departure;;00:48:43;00:48:43;Schiphol Departure
+PH-PDJ;TAMP;M;EHLE;EHRD;North;departure;;00:48:59;00:48:59;North
+KLM294;A319;M;LBSF;EHAM;Inbound;cruise;;00:49:07;00:49:07;South
+J-220;F35;M;;EHLW;Inbound;cruise;;00:49:37;00:49:37;West
+KLM367;B733;M;EHAM;;Schiphol Departure;departure;;00:49:37;00:49:37;Schiphol Departure
+KLM941_2;B738;M;EHEH;EGSS;South;departure;;00:49:37;00:49:37;South
+KLM280;B789;H;EHAM;ZBAA;Schiphol Departure;departure;;00:50:13;00:50:13;Schiphol Departure
+KLM981;E190;M;LIRQ;EHAM;Inbound;cruise;;00:50:39;00:50:39;South
+J-975;F35;M;EHLW;;North;departure;;00:50:50;00:50:50;North
+KLM696;A319;M;EHAM;;Schiphol Departure;departure;;00:51:07;00:51:07;Schiphol Departure
+J-486;EC35;L;EHVK;EHAM;South;departure;;00:51:28;00:51:28;South
+TZ424;B738;M;ETNG;LTAN;Inbound;cruise;;00:51:32;00:51:32;South
+TRA491;A320;M;LEMD;EHAM;Inbound;cruise;;00:51:38;00:51:38;South
+KLM398_2;B738;M;LFMN;EHEH;Inbound;cruise;;00:51:38;00:51:38;South
+TRA449;A319;M;LIML;EHAM;Inbound;cruise;;00:51:38;00:51:38;South
+KLM778;E190;M;EHAM;LFMT;Schiphol Departure;departure;;00:51:43;00:51:43;Schiphol Departure
+KLM471;B738;M;ENCN;EHRD;Inbound;cruise;;00:52:16;00:52:16;North
+J-129;F35;M;;EHVK;Inbound;cruise;;00:52:26;00:52:26;West
+TRA187;A320;M;EHAM;EGCC;Schiphol Departure;departure;;00:52:37;00:52:37;Schiphol Departure
+KLM615;B738;M;EHAM;EDDH;Schiphol Departure;departure;;00:53:13;00:53:13;Schiphol Departure
+PH-ULI;TB20;L;EHLE;EHBK;North;departure;;00:53:33;00:53:33;North
+TRA786;GALX;L;LEZL;EHRD;Inbound;cruise;;00:54:39;00:54:39;South
+TRA509;B737;M;EHAM;EGPD;Schiphol Departure;departure;;00:54:43;00:54:43;Schiphol Departure
+NH-546;A139;L;;EHKD;Inbound;cruise;;00:54:53;00:54:53;West
+TRA843;B738;M;EHAM;EKCH;Schiphol Departure;departure;;00:55:37;00:55:37;Schiphol Departure
+KLM175;B738;M;LEMG;EHAM;Inbound;cruise;;00:55:43;00:55:43;South
+KLM449;B733;M;EHAM;EVRA;Schiphol Departure;departure;;00:56:13;00:56:13;Schiphol Departure
+TRA605;B738;M;LTAI;EHRD;Inbound;cruise;;00:56:38;00:56:38;South
+KLM836;B738;M;EHEH;;South;departure;;00:56:54;00:56:54;South
+J225;F35;M;EHLE;;North;departure;;00:57:00;00:57:00;North
+KLM978;B38M;M;EHAM;LTAI;Schiphol Departure;departure;;00:57:07;00:57:07;Schiphol Departure
+TRA633;B738;M;LEMG;EHRD;Inbound;cruise;;00:57:32;00:57:32;South
+KLM873;E190;M;EHAM;EDDV;Schiphol Departure;departure;;00:57:43;00:57:43;Schiphol Departure
+KLM113;B737;M;LFMN;EHAM;Inbound;cruise;;00:58:22;00:58:22;South
+KLM758;B738;M;EHAM;EGBB;Schiphol Departure;departure;;00:58:37;00:58:37;Schiphol Departure
+J-922;EC35;L;EHVK;EHAM;South;departure;;00:58:39;00:58:39;South
+KLM636;B738;M;LEIB;EHAM;Inbound;cruise;;00:58:47;00:58:47;South
+KLM998;E190;M;EHAM;LIPE;Schiphol Departure;departure;;00:59:13;00:59:13;Schiphol Departure
+TRA302;A320;M;EHEH;EPWA;South;departure;;00:59:16;00:59:16;South
+J229;F35;M;EHLE;;North;departure;;01:02:00;01:02:00;North
+J230;F35;M;EHLE;;North;departure;;01:02:02;01:02:02;North
+J231;F35;M;EHLE;;North;departure;;01:11:10;01:11:10;North
+J232;F35;M;EHLE;;North;departure;;01:11:12;01:11:12;North
+J233;F35;M;EHLE;;North;departure;;01:17:00;01:17:00;North
+J234;F35;M;EHLE;;North;departure;;01:17:02;01:17:02;North
+J235;F35;M;EHLE;;North;departure;;01:18:10;01:18:10;North
+J236;F35;M;EHLE;;North;departure;;01:18:12;01:18:12;North
+J237;F35;M;EHLE;;North;departure;;01:21:00;01:21:00;North
+J238;F35;M;EHLE;;North;departure;;01:21:02;01:21:02;North
+J239;F35;M;EHLE;;North;departure;;01:23:10;01:23:10;North
