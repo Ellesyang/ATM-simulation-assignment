@@ -22,7 +22,7 @@ J-502;F35;M;EHLE;DON;North;departure;;00:00:14;00:00:14;North
 J-503;F35;M;EHLE;DON;North;departure;;00:00:16;00:00:16;North
 J-504;F35;M;EHLE;DON;North;departure;;00:00:18;00:00:18;North
 TRA164;A319;M;LIEO;EHAM;Inbound;cruise;;00:00:45;00:00:45;South
-KLM347;DH8D;M;EGHI;EHAM;Inbound;cruise;;00:00:49;00:13:00;West
+KLM347;DH8D;M;EGHI;EHAM;Inbound;cruise;;00:00:49;00:00:49;West
 KLM503;A320;M;EHAM;LPPT;Schiphol Departure;departure;;00:01:30;00:01:30;Schiphol Departure
 KLM761;E190;M;LIME;EHLE;Inbound;cruise;;00:01:32;00:01:32;South
 KLM929;B738;M;EIDW;EHEH;Inbound;cruise;;00:02:03;00:02:03;West
@@ -262,4 +262,3 @@ J236;F35;M;EHLE;;North;departure;;01:18:12;01:18:12;North
 J237;F35;M;EHLE;;North;departure;;01:21:00;01:21:00;North
 J238;F35;M;EHLE;;North;departure;;01:21:02;01:21:02;North
 J239;F35;M;EHLE;;North;departure;;01:23:10;01:23:10;North
-;;;;;;;;;;
